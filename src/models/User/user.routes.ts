@@ -1,0 +1,12 @@
+import express, { Router } from 'express';
+// import UserController from './user.contr.js';
+// import authMiddleware from '../../middleware/auth.js';
+// import { superAdminMiddleware } from '../../middleware/admins.js';
+const userRouter: Router = express.Router();
+userRouter.post('/create', );
+userRouter.post('/login', );
+userRouter.get('/', );
+userRouter.get('/:id', );
+userRouter.put('/:id', );
+userRouter.delete('/:id', );
+export default userRouter;
