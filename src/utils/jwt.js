@@ -4,7 +4,7 @@ dotenv.config();
 
 const secretKey = process.env.SECRET_KEY ;
 
-export const JWT = {
+export default {
     SIGN: (payload) => {
         return jwt.sign(payload, secretKey);
     },
