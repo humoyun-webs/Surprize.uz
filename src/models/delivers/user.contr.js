@@ -5,9 +5,9 @@ export default {
   get: async (req, res) => {
     try {
       const users = await User.find();
-      res.json(users);
+      return res.json(users);
     } catch (error) {
-      res.status(500).json({ error: "Failed to get users" });
+      return res.status(500).json({ error: "Failed to get users" });
     }
   },
 
