@@ -1,0 +1,61 @@
+TZ Backend - Tasks
+------------------------------- User----------------------------------------------------------
+
+User asosiy vazifasi harid qilish bo'ladi.
+
+U qaysidur buyumni harid qilishidan oldin ro'yxatdan o'tishi kerak, telefon nomer orqali kod borishli qilib.
+
+U umumiy holatda o'z locationini kiritishi lozim bo'ladi. Va o'sha location bo'yicha har doim buyum borishi kerak bo'ladi.
+
+U locationni har bir harid oldidan tasdiqlashi so'raladi. Agar xohlasa, 2-locationni yaratishi mumkin bo'ladi va keyingi haridda 2 ta location unda chiqishi kerak bo'ladi.
+
+Yani, xohlagancha location qo'shish imkoniyati bo'lishi kerak bo'ladi. Managing location bo'ladi, ya’ni.
+
+User har bir haridini historysini ko'rib turishi kerak bo'ladi va progressdagi zakazlarini ham.
+
+Userning profili bo'ladi, u profilni o'zgartirishi mumkin bo'ladi, ammo telefon nomerni almashtirmoqchi bo'lganda har 10-15 kundagini almashtirishi mumkin bo'ladi, telefonga kod borishi orqali.
+
+Userning like bosgan productlari saqlanadigan joyi bo'ladi, ya'ni hamma like bosgan productlarini ko'rib turadi.
+
+Userlar har bir productga komment yozishi mumkin bo'ladi. Va bu yozgan kommentlarini o'z profilida ko'rib tursa bo'ladigan bo'ladi.
+
+Userning profilida notification qismi bo'ladi va bu yerda hamma sayt yangiliklari yoki uning tovari yetib kelgani va shunga o'xshash progresslar userlarga yetkazib turiladi.
+
+To'lov Click va Payme orqali bo'ladi boshlanishiga va 3 xil tarifga bo'linadi:
+
+Free: Userga do'kon manzili aytiladi va to'lov oldindan qilingan bo'ladi. Bu yerda magazindan narsa sotib olishidan ko'ra bizning sayt orqali sotib olishi userga foydali bo'ladi, chunki narx tomonlama 5-50 minggacha farqli bo'ladi, ya'ni user narx tomonlama ancha arzonga oladi.
+
+Standart: Tovar 2 kunda yetib boradi.
+
+Premium: 24 soat ichida tovar yetkazilishi lozim bo'ladi va u 10 ming som bo'ladi.
+
+Standart va Premium tariflarida yetkazib berish uchun mashinada to'liq locationgacha 25 ming som yoki metrolar aro yetkazib berish 15 ming so'm bo'ladi.
+
+
+---------------------------------------------------------------------------------
+
+
+
+
+
+
+
+------------------------StoreAdmin -----------------------------------------------
+
+Birinchi navbatda, Super Admin, ya'ni sayt admini, Store Admin yaratishi mumkin bo'ladi. Ushbu jarayonda bir dona default store ochiladi va bu store to'liq boshqaruv huquqiga ega bo'lgan Store Admin uchun bo'ladi.
+
+Userlar Store Adminning do'konidan narsa sotib olsa, barcha orderlar Store Admin uchun ko'rinishi kerak bo'ladi. Barcha progresslar to'liq ko'rinishi lozim.
+
+Sotib oluvchi userlarning barcha store uchun zakazlari qaysi kun uchun dostavkaga ketishi va qaysi kunga tovarni qadoqlab qo'yishlari kerakligini to'liq ma'lumot berib borilishi kerak. Ya'ni, kunlik tovarlarni ko'rsatib turishi lozim.
+
+Har bir sotib olingan tovardan 85% Store hisobiga yoziladi, qolgan 15% esa Super Admin hisobiga yoziladi.
+
+Store Admin o'zining tovarlarini qo'shish, o'zgartirish va o'chirish imkoniyatiga ega bo'lishi kerak.
+
+Store tovarlari sotilishiga qarab, tovar soni kamayib boradi va 0 ga teng bo'lganda u tovarning aktivligi yo'qoladi. Agar yana tovari kelsa, sonini belgilagan holda yana aktivligini qaytarishi mumkin bo'ladi.
+
+Store Adminning barcha oylik foydasi hisoblanishi kerak bo'ladi.
+
+Store Admin dashboardida o'zining productlariga yozilgan barcha kommentlarni ko'rib turishi lozim.
+
+Store Admin o'ziga tegishli shartnomani ko'rish huquqiga ega bo'ladi.
