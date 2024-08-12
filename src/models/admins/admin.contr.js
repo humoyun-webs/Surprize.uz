@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 export default {
 login: async (req, res) => {
     const { phone, password } = req.body;
- 
+         
     try {
       const admin = await Admin.findOne({ phone });
       if (!admin) {
@@ -33,6 +33,7 @@ login: async (req, res) => {
       res.status(500).json({ error: "Failed to get admins" });
     }
   },
+
 
   async getById(req, res) {
     try {
@@ -62,7 +63,7 @@ login: async (req, res) => {
       });
 
       await admin.save();
-      res.status(201).json(admin);
+        res.status(201).json(admin);
     } catch (error) {
       res.status(500).json({ error: 'Failed to create admin' });
     }
