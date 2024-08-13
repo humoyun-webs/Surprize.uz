@@ -20,4 +20,4 @@ router.post("/",authenticateAdmin, addAdmin);
 router.put("/:id",authenticateAdmin, update);
 router.delete("/:id",authenticateAdmin, deleteAdmin);
 
-export default router;
+export default router; 
