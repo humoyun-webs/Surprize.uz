@@ -1,3 +1,4 @@
+import { imgUpload } from "../../utils/fileUpload.js";
 import Store from "./stores.model.js";
 
 export default {
@@ -32,17 +33,51 @@ export default {
     }
   },
 
-  async update(req, res) {
-    try {
-      const store = await Store.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-      }).populate("reviews");
-      if (!store) {
-        return res.status(404).json({ error: "Store not found" });
+  update: async (req, res) => {
+     
+    const { id } = req.params;
+    let { name, description, phone, location, reviews, products } = req.body;
+    const { files:file } = req; // Assuming you're using multer or a similar middleware for file uploads
+name = parser;(name)
+    try { 
+       const existingStore = await Store.findById(id);
+       if (!existingStore) {
+         return res.status(404).json({ message: "Store not found" });
+       }
+      // Handle image upload
+      let imagePath = undefined;
+      if (file) {
+        imagePath = await imgUpload(file, id, 'store');  // 'store' type for image upload
       }
-      res.json(store);
+
+      // Prepare the update data
+      const updateData = {
+        name: {
+          uz: name?.uz || existingStore.name?.uz,
+          ru: name?.ru || existingStore.name?.ru,
+        },
+        description: {
+          uz: description?.uz || existingStore.description?.uz,
+          ru: description?.ru || existingStore.description?.ru,
+        },
+        phone: phone || existingStore.phone,
+        location: location || existingStore.location,
+        reviews: reviews || existingStore.reviews,
+        products: products || existingStore.products,
+        ...(imagePath && { image: imagePath }), // Add image path only if it's updated
+      };
+
+      // Find and update the store
+      const updatedStore = await Store.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
+
+      if (!updatedStore) {
+        return res.status(404).json({ message: 'Store not found' });
+      }
+
+      res.json(updatedStore);
     } catch (error) {
-      res.status(500).json({ error: "Failed to update store" });
+      console.error(error);
+      res.status(500).json({ message: 'Failed to update store' });
     }
   },
 
@@ -58,3 +93,15 @@ export default {
     }
   },
 };
+
+function parser(jsonString) {
+  try {
+    // Attempt to parse the JSON string
+    const parsed = JSON.parse(jsonString);
+    return parsed;
+  } catch (error) {
+    // If parsing fails, handle the error (e.g., log it or return null)
+    console.error("Invalid JSON string:", error);
+    return null;
+  }
+}
