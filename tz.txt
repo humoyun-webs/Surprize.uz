@@ -1,7 +1,7 @@
 TZ Backend - Tasks
 ------------------------------- User----------------------------------------------------------
 
-User asosiy vazifasi harid qilish bo'ladi.
+ User asosiy vazifasi harid qilish bo'ladi.
 
 U qaysidur buyumni harid qilishidan oldin ro'yxatdan o'tishi kerak, telefon nomer orqali kod borishli qilib.
 
@@ -32,7 +32,7 @@ Premium: 24 soat ichida tovar yetkazilishi lozim bo'ladi va u 10 ming som bo'lad
 Standart va Premium tariflarida yetkazib berish uchun mashinada to'liq locationgacha 25 ming som yoki metrolar aro yetkazib berish 15 ming so'm bo'ladi.
 
 
----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------
 
 
 
@@ -40,7 +40,7 @@ Standart va Premium tariflarida yetkazib berish uchun mashinada to'liq locationg
 
 
 
-------------------------StoreAdmin -----------------------------------------------
+------------------------StoreAdmin -------------------------------------------------------
 
 Birinchi navbatda, Super Admin, ya'ni sayt admini, Store Admin yaratishi mumkin bo'ladi. Ushbu jarayonda bir dona default store ochiladi va bu store to'liq boshqaruv huquqiga ega bo'lgan Store Admin uchun bo'ladi.
 
@@ -59,3 +59,47 @@ Store Adminning barcha oylik foydasi hisoblanishi kerak bo'ladi.
 Store Admin dashboardida o'zining productlariga yozilgan barcha kommentlarni ko'rib turishi lozim.
 
 Store Admin o'ziga tegishli shartnomani ko'rish huquqiga ega bo'ladi.
+
+-----------------------------------------------------------------------------
+
+
+
+-------------------------------deliver ------------------------------------
+
+Driverlarni admin yarata oladigan boladi va barcha malumotlari tolliq kirgiziladi(hozircha faqat admin qoshadigan qilamiz ammo keyinchalik tolliq avtomatlashtiramiz yani oz malumotlarini kirgizib driver sifatida ishlashi mumkun qilamiz).
+
+Deliverlar yani yetqazib beruvchilar  hozircha 2 hilga bolinadi.
+
+Metro boylab piyoda va Mashinada aniq bir locationga.
+
+Driver Deliverlar har bir zakazdan 20 ming som olishadi lekin dostavka summasi tarifga kora 25 ming yoki 35 ming som boladi. Bu nimani anglatadi yani user tolov qilgandan keyin 
+tolov umumiy summasidan driver puli ajralishi kerak boladi yani driverni togri kartasiga tushishi kerak boladi(20 ming som).
+
+Driver 1 kun oldingi zakazlarini korib turishi mumkun boladi yani oldindan qanday ishlar qilishi malum boladi. 
+
+
+
+Driver hamma zakazlarini oyi boyicha foydasini chiqarib berish kerak boladi yani qancha foyda olgani qancha zakaz olgani va shunga oxshash. 
+
+Driverga notification borib turishi kerak har bir eventda.
+
+Driver va user ortasida ish progressi - User zakaz beradi va driver zakazni olib borgandan keyin unga taklif yuboradi yani zakazni oldingizmi degan agar user ha tugmasini bosgandan keyin tovar user qoliga beriladi.
+
+Driver va metro boylab piyoda yetqazib berishlarda qanday ish bolib beriladi??
+ agar 3 driverimiz bolsa va 5 ta zakaz tushsa 
+1-zakaz 1-driverga
+2-zakaz 2-driverga
+3-zakaz 3-driverga
+4-zakaz 1-driverga
+5-zakaz 2-driverga  
+logikasi shu holatda boladi.
+
+Driverlarni active va inactive statuslari boladi yani Admin uni manage qila oladigan boladi
+ agar statusi inactive bolsa unga ish bolib berilmaydi.
+
+
+
+
+
+
+

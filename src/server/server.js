@@ -1,6 +1,6 @@
 import express from "express";
 import  "../db/globalMongo.js";
-import router from "../models/index.routes.js";
+import router from "../controllers/index.routes.js";
 import fileUpload from 'express-fileupload'
 import cors from 'cors'
 import bodparser from 'body-parser'
