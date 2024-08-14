@@ -2,7 +2,7 @@ import Admin from "./admin.model.js";
 import JWT from "../../utils/jwt.js"
 import bcrypt from "bcrypt";
 
-export default {
+export default { 
 login: async (req, res) => {
     const { phone, password } = req.body;
          
