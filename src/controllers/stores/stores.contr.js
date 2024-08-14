@@ -4,9 +4,11 @@ import Store from "./stores.model.js";
 export default {
   async get(req, res) {
     try {
-      const stores = await Store.find().populate("reviews");
+      const stores = await Store.find()
+        // .populate("reviews");
       res.json(stores);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: "Failed to get stores" });
     }
   },

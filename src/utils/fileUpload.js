@@ -17,13 +17,13 @@ export async function imgUpload(file, userId, type = "profile") {
   }
 
   // Determine upload directory based on the type
-  let uploadDir =
+  let uploadDirs =
     {
-      profile: "/public/profileImgs/",
-      store: "/public/storeImgs/",
-      product: "/public/productImgs/",
-    }[type] || "/public/otherImgs/";
-uploadDir= "/src"+uploadDir
+      profile: "/profileImgs/",
+      store: "/storeImgs/",
+      product: "/productImgs/",
+    }[type] || "/otherImgs/";
+let uploadDir = "/src/public" + uploadDirs;
   // Generate unique file name
   const uniqueFileName = `${userId}-${Date.now()}${ext}`;
   const uploadPath = path.join(process.cwd(), uploadDir, uniqueFileName);
@@ -49,6 +49,6 @@ uploadDir= "/src"+uploadDir
   });
 
   // Return the path relative to the public directory
-  const imgPath = `${uploadDir}${uniqueFileName}`;
+  const imgPath = `public/${uploadDirs[type]}${uniqueFileName}`;
   return imgPath;
 }
