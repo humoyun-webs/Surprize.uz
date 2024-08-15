@@ -11,11 +11,11 @@ export default {
       console.log(error);
       res.status(500).json({ error: "Failed to get stores" });
     }
-  },
+  }, 
 
   async getById(req, res) {
     try {
-      const store = await Store.findById(req.params.id).populate("reviews");
+      const store = await Store.findById(req.params.id)
       if (!store) {
         return res.status(404).json({ error: "Store not found" });
       }
@@ -38,7 +38,7 @@ export default {
   update: async (req, res) => {
      
     const { id } = req.params;
-    let { name, description, phone, location, reviews, products } = req.body;
+    let { name, description, phone, location, reviews, products ,id_name } = req.body;
     const { files:file } = req; // Assuming you're using multer or a similar middleware for file uploads
 name = parser;(name)
     try { 
@@ -51,7 +51,6 @@ name = parser;(name)
       if (file) {
         imagePath = await imgUpload(file, id, 'store');  // 'store' type for image upload
       }
-
       // Prepare the update data
       const updateData = {
         name: {
@@ -64,8 +63,7 @@ name = parser;(name)
         },
         phone: phone || existingStore.phone,
         location: location || existingStore.location,
-        reviews: reviews || existingStore.reviews,
-        products: products || existingStore.products,
+        id_name: id_name || existingStore.id_name,
         ...(imagePath && { image: imagePath }), // Add image path only if it's updated
       };
 

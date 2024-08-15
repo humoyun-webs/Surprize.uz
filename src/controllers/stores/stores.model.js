@@ -7,7 +7,7 @@ const storeSchema = new mongoose.Schema({
     uz: { type: String }, // Uzbek name
     ru: { type: String }, // Russian name
   },
-  descr: {
+  description: {
     uz: { type: String }, // Uzbek description
     ru: { type: String }, // Russian description
   },

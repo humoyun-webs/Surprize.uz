@@ -28,6 +28,8 @@ export default {
 
   async create(req, res) {
     try {
+      let { name, price, descr, category, coun, idname } = req.body;
+      
       const product = new Product(req.body);
       await product.save();
       res.status(201).json(product);
