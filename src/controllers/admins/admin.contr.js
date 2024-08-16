@@ -28,6 +28,7 @@ login: async (req, res) => {
   async get(req, res) {
     try {
       const admins = await Admin.find().populate("contract");
+      if(!admins) return res.status(402).json({message:'Data is not found !'})
       res.json(admins);
     } catch (error) {
       res.status(500).json({ error: "Failed to get admins" });

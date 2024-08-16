@@ -97,9 +97,14 @@ logikasi shu holatda boladi.
 Driverlarni active va inactive statuslari boladi yani Admin uni manage qila oladigan boladi
  agar statusi inactive bolsa unga ish bolib berilmaydi.
 
+----------------------------------------------------------------
 
 
 
+
+-------------------------product --------------------------
+
+admin , Store, Product, Order
 
 
 

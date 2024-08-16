@@ -51,7 +51,7 @@ name = parser;(name)
       if (file) {
         imagePath = await imgUpload(file, id, 'store');  // 'store' type for image upload
       }
-      // Prepare the update data
+    
       const updateData = {
         name: {
           uz: name?.uz || existingStore.name?.uz,

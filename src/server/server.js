@@ -17,6 +17,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/upload", express.static(`${process.cwd()}/src/public`));
 app.use(express.json())
 app.use(bodparser.json())
+
+
+
 app.set('trust proxy', true);
 app.use('/api', router);
 
