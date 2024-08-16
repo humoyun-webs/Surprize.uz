@@ -100,8 +100,6 @@ Driverlarni active va inactive statuslari boladi yani Admin uni manage qila olad
 ----------------------------------------------------------------
 
 
-
-
 -------------------------product --------------------------
 
 admin , Store, Product, Order

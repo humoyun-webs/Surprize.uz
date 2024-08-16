@@ -8,10 +8,8 @@ const isAuth = async (req, res, next)=>{
     const token = await (req.headers["authorization"]).split(' ')[1];
      
     if(!token) return res.status(401).json({message: "Permission denied"});
-    
-    const JWT_SECRET_KEY = '5177f3a7-fc12-4d40-be35-171ee347a659';
-    
-    const user = await jwt.verify(token, JWT_SECRET_KEY);
+        
+    const user = await jwt.verify(token, process.env.SECRET_KEY);
     
     req.user = user;
     
