@@ -15,11 +15,12 @@ const productSchema = new mongoose.Schema({
   images: [{ type: String }],
   review: { type: mongoose.Schema.Types.ObjectId, ref: "Review" },
   category: {
-    type:String
+    type: String,
     // type: mongoose.Schema.Types.ObjectId, ref: "Category"
   },
-  count: { type: Number }, 
-  id_name: { type: String,unique:true}, 
+  count: { type: Number },
+  id_name: { type: String, unique: true },
+  store: { type: mongoose.Schema.Types.ObjectId, ref: "Store" },
 });
  
 productSchema.pre("save", async function (next) {
