@@ -33,7 +33,7 @@ productSchema.pre("save", async function (next) {
       let existingStore = await mongoose.models.Product.findOne({
         id_name: idName,
       });
-      console.log(existingStore);
+      
       if (existingStore) {
         idName = `${idName}-${uuidv4().slice(0, 8)}`;
       }
