@@ -35,22 +35,7 @@ export const storeMiddleware = {
     },
 
     checkStoreUpdate: async (req, res, next) => {
-        if (typeof req.body.name === "string") { 
-          req.body.name = JSON.parse(req.body.name);
-          req.body.name = JSON.parse(req.body.name);
-          try {
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    if (typeof req.body.description === "string") {
-        try { 
-            req.body.description = JSON.parse(req.body.description);
-            req.body.description = JSON.parse(req.body.description);
-        } catch (error) {
-          console.log("iye");
-        }
-      }
+      
       try {
         // Validate the request body using the Joi schema
 
@@ -107,15 +92,11 @@ export const storeMiddleware = {
     }
 }
 const updateStoreSchema = Joi.object({
-  name: Joi.object({
-    uz: Joi.string(), // Uzbek name
-    ru: Joi.string(), // Russian name
-  }),
+  name_uz: Joi.string(),
+  name_ru: Joi.string(),
 
-  description: Joi.object({
-    uz: Joi.string(), // Uzbek description
-    ru: Joi.string(), // Russian description
-  }),
+  description_uz: Joi.string(),
+  description_ru: Joi.string(),
 
   id_name: Joi.string()
     .pattern(/^[a-zA-Z0-9-]+$/)

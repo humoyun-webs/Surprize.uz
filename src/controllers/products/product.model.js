@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
+import { v4 as uuidv4 } from "uuid";
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -12,26 +14,30 @@ const productSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   images: [{ type: String }],
   review: { type: mongoose.Schema.Types.ObjectId, ref: "Review" },
-  category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
-  count: { type: Number },
-  id_name: { type: String, unique: true, required: true },
+  category: {
+    type:String
+    // type: mongoose.Schema.Types.ObjectId, ref: "Category"
+  },
+  count: { type: Number }, 
+  id_name: { type: String,unique:true}, 
 });
-
-
+ 
 productSchema.pre("save", async function (next) {
+  // ID_NAME GENERATE
   if (!this.id_name) {
     // Generate id_name from the Uzbek name if provided
     if (this.name.uz) {
       let idName = slugify(this.name.uz, { lower: true, strict: true });
-      
+
       // Ensure id_name is unique
-      let existingStore = await mongoose.models.Store.findOne({
+      let existingStore = await mongoose.models.Product.findOne({
         id_name: idName,
       });
+      console.log(existingStore);
       if (existingStore) {
         idName = `${idName}-${uuidv4().slice(0, 8)}`;
       }
-      
+
       this.id_name = idName;
     } else {
       // If no Uzbek name is provided, generate a random id_name
@@ -46,8 +52,24 @@ productSchema.pre("save", async function (next) {
       return next(new Error("id_name must be unique"));
     }
   }
+  // NAME.RU GENERATE
+  if (!this.name.ru) {
+    this.name.ru = this.name.uz;
+  }
+
+  // DESCRIPTION
+  if (
+    (this.description?.uz && !this.description?.ru) ||
+    (!this.description?.uz && this.description?.ru)
+  ) {
+    this.description.uz
+      ? (this.description.ru = this.description.uz)
+      : (this.description.uz = this.description.ru);
+  }
+
   next();
 });
 
 const Product = mongoose.model("Product", productSchema);
+
 export default Product;

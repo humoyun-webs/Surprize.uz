@@ -1,3 +1,4 @@
+import { imgUpload } from "../../utils/fileUpload.js";
 import Product from "./product.model.js";
 
 export default {
@@ -28,12 +29,45 @@ export default {
 
   async create(req, res) {
     try {
-      let { name, price, descr, category, coun, idname } = req.body;
-      
-      const product = new Product(req.body);
+      let {
+        name_uz,
+        name_ru,
+        price,
+        description_uz,
+        description_ru,
+        category,
+        count,
+        id_name,
+      } = req.body;
+      const { files: file } = req; // Assuming you're using multer or a similar middleware for file uploads
+
+      // console.log(price);
+// return
+      const product = new Product({
+        name: { uz: name_uz, ru: name_ru },
+        description: {
+          uz: description_uz,
+          ru: description_ru,
+        },
+          category,
+          count,
+          id_name,
+          price,
+        
+      });
+     await product.save()
+      // console.log(product);
+return
+      let imagePaths;
+      if (file.images) {
+        imagePaths = await imgUpload(file, id, "product"); // 'store' type for image upload
+      }
+      return;
+
       await product.save();
       res.status(201).json(product);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: "Failed to create product" });
     }
   },

@@ -4,20 +4,21 @@ import fs from "fs";
 // Function to handle image uploads
 export async function imgUpload(file, userId, type = "profile") {
     // console.log(file.image);
-  if (!file || !file.image) {
+  if (!file) {
     return { message: "No file provided" };
   }
 
   const allowedExtensions = [".jpg", ".jpeg", ".png"];
   const image = file.image;
+  console.log(image);
   const ext = path.extname(image.name).toLowerCase();
 
   if (!allowedExtensions.includes(ext)) {
     return { message: "Only JPEG and PNG image files are allowed" };
-  }
+  } 
 
   // Determine upload directory based on the type
-  let uploadDirs =
+  let uploadDirs = 
     {
       profile: "/profileImgs/",
       store: "/storeImgs/",

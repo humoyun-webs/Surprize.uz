@@ -35,12 +35,14 @@ export default {
     }
   },
 
-  update: async (req, res) => {
+  async update(req, res){
      
     const { id } = req.params;
-    let { name, description, phone, location, reviews, products ,id_name } = req.body;
+    let { name_uz,name_ru, description_uz,description_ru, phone, location, reviews, products ,id_name } = req.body;
     const { files:file } = req; // Assuming you're using multer or a similar middleware for file uploads
-name = parser;(name)
+let name ={uz:name_uz,ru:name_ru}
+    let description = { uz: description_uz, ru: description_ru }
+    
     try { 
        const existingStore = await Store.findById(id);
        if (!existingStore) {
@@ -48,7 +50,7 @@ name = parser;(name)
        }
       // Handle image upload
       let imagePath = undefined;
-      if (file) {
+      if (file.image) {
         imagePath = await imgUpload(file, id, 'store');  // 'store' type for image upload
       }
     
