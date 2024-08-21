@@ -16,6 +16,7 @@ const storeSchema = new mongoose.Schema({
   phone: { type: String, unique: true, required: true },
   location: { type: String },
   reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+  rating: { type: Number, default: 0 },
   products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
 });
 
@@ -42,6 +43,7 @@ storeSchema.pre("save", async function (next) {
     // Ensure manually provided id_name is unique
     let existingStore = await mongoose.models.Store.findOne({
       id_name: this.id_name,
+      _id: { $ne: this._id },
     });
     if (existingStore) {
       return next(new Error("id_name must be unique"));

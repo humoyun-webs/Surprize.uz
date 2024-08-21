@@ -6,6 +6,7 @@ import adminRouter from "./admins/admin.routes.js";
 import storeRouter from "./stores/stores.routes.js";
 import productRouter from "./products/product.routes.js";
 import categoryRouter from "./category/category.routes.js";
+import reviewRouter from "./review/review.routes.js";
 
 
 
@@ -16,6 +17,7 @@ router.use("/admin", adminRouter);
 router.use("/store", storeRouter);
 router.use("/product", productRouter);
 router.use("/category", categoryRouter);
+router.use("/review", reviewRouter);
 
 router.get("/", (req, res) => {
   res.send(`

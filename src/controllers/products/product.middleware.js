@@ -26,7 +26,11 @@ const UpdateProductSchema = Joi.object({
   store_id: Joi.string(), // Assuming you have a store_id
 });
 
-const PostProductMiddleware = async (req, res, next) => {
+
+
+
+export default {
+ async PostProductMiddleware(req, res, next){
   try {
     // Step 1: Validate the incoming data
     const { error } = productSchema.validate(req.body);
@@ -63,6 +67,45 @@ const PostProductMiddleware = async (req, res, next) => {
     console.error("Error in product middleware:", err);
     res.status(500).json({ message: "Internal server error" });
   }
-};
+  },
+  
+  async PutProductMiddleware (req, res, next){
+  try {
+    // Step 1: Validate the incoming data
+    const { error } = UpdateProductSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
 
-export default PostProductMiddleware;
+    // Step 2: Check for uniqueness of id_name
+    const existingProduct = await Product.findOne({
+      id_name: req.body.id_name,
+      _id: { $ne: req.params.id },
+    });
+    if (existingProduct) {
+      return res.status(409).json({ message: "id_name must be unique." });
+    }
+
+    // Step 3: Check if category exists
+    const category = await Category.findById(req.body.category_id);
+    if (!category) {
+      return res.status(404).json({ message: "Category not found." });
+    }
+
+    // Step 4: Check if store exists
+    const store = await Store.findById(req.body.store_id);
+    if (!store) {
+      return res.status(404).json({ message: "Store not found." });
+    }
+
+    // Attach the valid category and store to req object
+    req.category = category;
+    req.store = store;
+
+    next(); // Proceed to the next middleware or controller
+  } catch (err) {
+    console.error("Error in product middleware:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+};

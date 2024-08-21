@@ -13,10 +13,11 @@ const productSchema = new mongoose.Schema({
   },
   price: { type: Number, required: true },
   images: [{ type: String }],
-  review: { type: mongoose.Schema.Types.ObjectId, ref: "Review" },
+  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+  rating: { type: Number, default: 0 },
   category: {
-    type: String,
-    // type: mongoose.Schema.Types.ObjectId, ref: "Category"
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
   },
   count: { type: Number },
   id_name: { type: String, unique: true },
@@ -46,8 +47,9 @@ productSchema.pre("save", async function (next) {
     }
   } else {
     // Ensure manually provided id_name is unique
-    let existingProduct = await mongoose.models.productSchema.findOne({
+    let existingProduct = await mongoose.models.Product.findOne({
       id_name: this.id_name,
+      _id: { $ne: this._id },
     });
     if (existingProduct) {
       return next(new Error("id_name must be unique"));
