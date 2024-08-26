@@ -3,10 +3,9 @@ const { Schema } = mongoose;
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  l_name:{ type: String, required: true},
   age: { type: Number },
   location: { type: String },
-  phone: { type: String, required: true ,unique:true },
+  number: { type: String, required: true ,unique:true },
   favorite: [{
     type: Schema.Types.ObjectId,
     ref: 'Product'

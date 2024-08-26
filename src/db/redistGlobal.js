@@ -1,16 +1,20 @@
-import { Redis } from "ioredis";
-import { promisify } from "util";
+import { createClient } from "redis";
 
-const redisHost = process.env.REDIS_HOST || "localhost";
-const redisPort = parseInt(process.env.REDIS_PORT || "6379", 10);
+const redisPassword = process.env.REDIS_PASS 
+const redisHost = process.env.REDIS_HOST
+const redisPort = process.env.REDIS_PORT
 
-const client = new Redis({
-  host: redisHost,
-  port: redisPort,
-  lazyConnect: true,
+
+const client = createClient({
+  password: redisPassword,
+  socket: {
+    host: redisHost,
+    port: redisPort,
+  },
 });
+client.connect(); 
 
-client.connect();
+
 
 client.on("connect", function () {
   console.log("Redis has connected successfully");
@@ -20,12 +24,10 @@ client.on("error", function (error) {
   console.error("Redis failed to connect:", error);
 });
 
-const asyncGet = promisify(client.get).bind(client);
-const asyncSet = promisify(client.set).bind(client);
 
 async function setRedisData(key, value) {
   try {
-    await asyncSet(key, JSON.stringify(value));
+   await client.set(key,value);
   } catch (error) {
     console.error("Redis failed to write data:", error);
     throw new Error("Redis failed to write data");
@@ -34,20 +36,11 @@ async function setRedisData(key, value) {
 
 async function getRedisData(key) {
   try {
-    const data = await asyncGet(key);
-    return data ? JSON.parse(data) : null;
+    const data = await client.get(key);
+    return data
   } catch (error) {
     console.error("Redis failed to get data:", error);
     throw Error("Redis failed to get data");
-  }
-}
-
-async function updateRedisData(key, value) {
-  try {
-    await asyncSet(key, JSON.stringify(value));
-  } catch (error) {
-    console.error("Redis failed to update data:", error);
-    throw new Error("Redis failed to update data");
   }
 }
 
@@ -60,4 +53,5 @@ async function deleteRedisData(key) {
   }
 }
 
-export { setRedisData, getRedisData, updateRedisData, deleteRedisData, client };
+export { setRedisData, getRedisData, deleteRedisData, client };
+

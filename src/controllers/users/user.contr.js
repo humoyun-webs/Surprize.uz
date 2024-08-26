@@ -1,7 +1,13 @@
 import User from "./user.model.js";
-import Joi from "joi"
-import dotenv from 'dotenv'
-
+import Joi from "joi";
+import dotenv from "dotenv";
+import {
+  setRedisData,
+  getRedisData,
+  deleteRedisData,
+} from "../../db/redistGlobal.js";
+import { generateCode } from "../../utils/generateCode.js";
+import JWT from "../../utils/jwt.js";
 
 export default {
   get: async (req, res) => {
@@ -27,11 +33,50 @@ export default {
 
   create: async (req, res) => {
     try {
-      const user = new User(req.body);
-      await user.save();
-      res.status(201).json(user);
+      const { name, age, location, number, code } = req.body;
+      if (!name || !number) {
+        return res.status(400).json({
+          error: "Invalid data",
+        });
+      }
+      if (!code) {
+        const generatedConfirmationCode = generateCode();
+        await setRedisData(number, generatedConfirmationCode);
+
+        return res.status(201).json({
+          success: true,
+          code: generatedConfirmationCode,
+          error: "Confirmation code sent to the phone number",
+        });
+      } else {
+        if (code !== (await getRedisData(number))) {
+          return res.status(400).json({
+            error:
+              "The confirmation code you entered is incorrect. Please try again.",
+          });
+        } else {
+          const user = await User.create({
+            name,
+            age,
+            location,
+            number,
+            favorite: [],
+          });
+
+          let token = JWT.SIGN({ id: user.id });
+          res.status(201).json({
+            token,
+            data: user,
+          });
+
+          await deleteRedisData(number);
+        }
+      }
     } catch (error) {
-      res.status(500).json({ error: "Failed to create user" });
+      console.log(error);
+      res.status(500).json({
+        error: "Internal server error",
+      });
     }
   },
 
@@ -65,21 +110,23 @@ export default {
     try {
       const token = await req.headers["authorization"].split(" ")[1];
 
-      if(!token){
-        return res.status(403).json({message:"in this moment have unfortunately event"})
-       }
-        
-       const decoded = await jwt.verify(token, process.env.SECRET_KEY);
+      if (!token) {
+        return res
+          .status(403)
+          .json({ message: "in this moment have unfortunately event" });
+      }
 
-       const userId = decoded.user_id
+      const decoded = await jwt.verify(token, process.env.SECRET_KEY);
+
+      const userId = decoded.user_id;
       const { productId } = req.body;
-  
+
       // Find the user by ID
       const user = await User.findById(userId);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
-  
+
       // Check if the product is already in the favorites list
       if (!user.favorite.includes(productId)) {
         user.favorite.push(productId);
@@ -96,17 +143,17 @@ export default {
   getFavorites: async (req, res) => {
     try {
       const userId = req.params.id;
-  
+
       // Find the user by ID and populate the favorite products
-      const user = await User.findById(userId).populate('favorite');
+      const user = await User.findById(userId).populate("favorite");
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
-  
+
       // Return the list of favorite products
       res.json(user.favorite);
     } catch (error) {
       res.status(500).json({ error: "Failed to retrieve favorite products" });
     }
-  }
+  },
 };
