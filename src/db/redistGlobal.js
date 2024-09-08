@@ -27,6 +27,7 @@ client.on("error", function (error) {
 
 async function setRedisData(key, value) {
   try {
+    console.log(key,value);
    await client.set(key,value);
   } catch (error) {
     console.error("Redis failed to write data:", error);

@@ -4,15 +4,16 @@ import User from "./user.model.js"; // Adjust the path as necessary
 // Joi schema for user validation
 const userSchema = Joi.object({
   name: Joi.string().required(),
-  phone: Joi.string().required(), // Assuming this is a string, could be a phone number
+  number: Joi.string().required(), // Assuming this is a string, could be a phone number
   password: Joi.string().required(), // Password is required
   location: Joi.string().optional(),
+  code: Joi.string().optional(),
   age: Joi.number().optional(),
 });
 
 const updateUserSchema = Joi.object({
   name: Joi.string().optional(),
-  phone: Joi.string().optional(),
+  number: Joi.string().optional(),
   password: Joi.string().optional(),
   location: Joi.string().optional(),
   age: Joi.number().optional(),
@@ -28,7 +29,7 @@ const userMiddleware = {
     }
 
     // Check if the phone number is already in use
-    const existingUser = await User.findOne({ phone: req.body.phone });
+    const existingUser = await User.findOne({ number: req.body.number });
     if (existingUser) {
       return res.status(409).json({ message: "Phone number already in use" });
     }
@@ -45,7 +46,7 @@ const userMiddleware = {
     }
     
     const existingUser = await User.findOne({
-      phone: req.body.phone,
+      phone: req.body.number,
       _id: { $ne: req.params.id },
     });
     if (existingUser) {
