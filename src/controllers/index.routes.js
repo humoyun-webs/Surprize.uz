@@ -7,7 +7,9 @@ import storeRouter from "./stores/stores.routes.js";
 import productRouter from "./products/product.routes.js";
 import categoryRouter from "./category/category.routes.js";
 import reviewRouter from "./review/review.routes.js";
-
+import generalLogin from "./other/login.js"
+import develiverRouter from "./deliver/deliver.routes.js"
+import orderRouter from "./order/order.routes.js"
 
 
 
@@ -16,8 +18,11 @@ router.use("/users", userRouter);
 router.use("/admin", adminRouter);
 router.use("/store", storeRouter);
 router.use("/product", productRouter);
-router.use("/category", categoryRouter);
+router.use("/category", categoryRouter); 
 router.use("/review", reviewRouter);
+router.use("/login", generalLogin);
+router.use("/deliver", develiverRouter);
+router.use("/order", orderRouter);
 
 router.get("/", (req, res) => {
   res.send(`

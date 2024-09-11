@@ -1,17 +1,17 @@
 import express from "express";
 import productController from "./product.contr.js";
 import ProductMiddleware from "./product.middleware.js";
-import adminStore_adminMiddleware from "../../middleware/admin&store_admin-middleware.js";
+import isAllowed from "../../middleware/isAllowed.js";
 
 const router = express.Router();
 let { get, getById, create, update, delete: deleteProduct } = productController;
-let { checkToken } = adminStore_adminMiddleware;
+let { checkTokenForStore } = isAllowed;
 let { PostProductMiddleware,PutProductMiddleware } = ProductMiddleware;
 
 router.get("/", get);
 router.get("/:id", getById);
-router.post("/", checkToken,PostProductMiddleware, create);
-router.put("/:id",checkToken,PutProductMiddleware, update);
-router.delete("/:id",checkToken, deleteProduct);
+router.post("/", checkTokenForStore, PostProductMiddleware, create);
+router.put("/:id", checkTokenForStore, PutProductMiddleware, update);
+router.delete("/:id", checkTokenForStore, deleteProduct);
 
 export default router;

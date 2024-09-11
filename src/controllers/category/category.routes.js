@@ -1,7 +1,7 @@
 import express from "express";
 import categoryController from "./category.contr.js";
 import categoryMiddleware from "./category.middleware.js"; // Adjust the path as necessary
-import adminStore_adminMiddleware from "../../middleware/admin&store_admin-middleware.js";
+import isAllowed from "../../middleware/isAllowed.js";
 
 
 const router = express.Router();
@@ -12,13 +12,13 @@ const {
   update,
   del
 } = categoryController;
-const { checkToken } = adminStore_adminMiddleware;
+const { isAdmin } = isAllowed;
 const { validateCategoryData } = categoryMiddleware;
 
 router.get("/", get);
 router.get("/:id", getById); 
-router.post("/", checkToken, validateCategoryData, create);
-router.put("/:id", checkToken, validateCategoryData, update);
-router.delete("/:id", checkToken, del);
+router.post("/", isAdmin, validateCategoryData, create);
+router.put("/:id", isAdmin, validateCategoryData, update);
+router.delete("/:id", isAdmin, del);
 
 export default router;

@@ -10,6 +10,10 @@ const userSchema = new mongoose.Schema({
   favorite: [{
     type: Schema.Types.ObjectId,
     ref: 'Product'
+  }],
+  orders: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Order'
   }]
 });
 
