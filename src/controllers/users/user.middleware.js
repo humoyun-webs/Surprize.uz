@@ -44,9 +44,9 @@ const userMiddleware = {
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
-    
+
     const existingUser = await User.findOne({
-      phone: req.body.number,
+      number: req.body.number,
       _id: { $ne: req.params.id },
     });
     if (existingUser) {
