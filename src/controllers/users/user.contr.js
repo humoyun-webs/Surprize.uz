@@ -113,11 +113,11 @@ export default {
   update: async (req, res) => {
     try {
       let { password } = req.body;
+      req.body.password = password
+        ? await bcrypt.hash(password, 10)
+        : undefined;
       const user = await User.findByIdAndUpdate(
         req.params.id,
-        {
-          password: password ? await bcrypt.hash(password, 10) : undefined,
-        },
         req.body,
         {
           new: true,
