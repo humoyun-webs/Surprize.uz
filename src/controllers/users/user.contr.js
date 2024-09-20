@@ -35,7 +35,7 @@ export default {
 
   create: async (req, res) => {
     try {
-      const { name, age, location, password, number, code } = req.body;
+      const { name, age, location, password,phone: number, code } = req.body;
 
       if (!code) {
         const generatedConfirmationCode = generateCode();
@@ -58,7 +58,7 @@ export default {
         name,
         age,
         location,
-        number,
+        phone:number,
         password: hashedPassword,
         favorite: [],
       });
@@ -91,6 +91,7 @@ export default {
 
       // Check if the password matches
       const isMatch = await bcrypt.compare(password, user.password);
+
       if (!isMatch) {
         return res
           .status(401)
@@ -131,7 +132,7 @@ export default {
       console.log(error);
       res.status(500).json({ error: "Failed to update user" });
     }
-  },
+  }, 
 
   delete: async (req, res) => {
     try {
