@@ -58,19 +58,20 @@ export default {
     if (!token) {
       return res.status(403).json({ message: "Forbidden" });
     }
-
+    
     try {
       const decoded = JWT.VERIFY(token);
       const admin = await Admin.findById(decoded.id);
       const deliver = await Deliver.findById(decoded.id);
-
+      
       if (!admin && !deliver) {
         return res.status(403).json({ message: "Forbidden" });
       }
-
-      const isAdmin = admin.role === "admin";
-      const isCorrectDeliver = deliver.id == editingDeliverId;
-
+      
+      const isAdmin = admin?.role === "admin";
+      let isCorrectDeliver = true
+      if(editingDeliverId) isCorrectDeliver = deliver.id == editingDeliverId;
+      
       if (isAdmin || isCorrectDeliver) {
         req.admin = admin;
         req.deliver = deliver;
@@ -79,6 +80,7 @@ export default {
         return res.status(403).json({ message: "Forbidden" });
       }
     } catch (error) {
+      console.log(error);
       return res.status(403).json({ message: "Forbidden" });
     }
   },

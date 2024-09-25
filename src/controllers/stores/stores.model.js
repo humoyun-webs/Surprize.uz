@@ -2,23 +2,26 @@ import mongoose from "mongoose";
 import slugify from "slugify";
 import { v4 as uuidv4 } from "uuid";
 
-const storeSchema = new mongoose.Schema({
-  name: {
-    uz: { type: String }, // Uzbek name
-    ru: { type: String }, // Russian name
+const storeSchema = new mongoose.Schema(
+  {
+    name: {
+      uz: { type: String }, // Uzbek name
+      ru: { type: String }, // Russian name
+    },
+    description: {
+      uz: { type: String }, // Uzbek description
+      ru: { type: String }, // Russian description
+    },
+    id_name: { type: String, unique: true }, // Unique id_name based on Uzbek name
+    image: { type: String },
+    phone: { type: String, unique: true, required: true },
+    location: { type: String },
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
+    rating: { type: Number, default: 0 },
+    products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
   },
-  description: {
-    uz: { type: String }, // Uzbek description
-    ru: { type: String }, // Russian description
-  },
-  id_name: { type: String, unique: true }, // Unique id_name based on Uzbek name
-  image: { type: String },
-  phone: { type: String, unique: true, required: true },
-  location: { type: String },
-  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
-  rating: { type: Number, default: 0 },
-  products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
-});
+  { timestamps: true }
+);
 
 storeSchema.pre("save", async function (next) {
   if (!this.id_name) {

@@ -54,14 +54,8 @@ export default {
         });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
-      const user = await User.create({
-        name,
-        age,
-        location,
-        phone:number,
-        password: hashedPassword,
-        favorite: [],
-      });
+      req.body.password=hashedPassword
+      const user = await User.create(req.body);
 
       let token = JWT.SIGN({ id: user.id });
       res.status(201).json({

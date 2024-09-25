@@ -6,7 +6,7 @@ const deliverSchema = new Schema(
     name: { type: String, required: true },
     age: { type: Number},
     description: { type: String },
-    number: { type: String, required: true, unique: true },
+    phone: { type: String, required: true, unique: true },
     password: { type: String, required: true,},
     transport_type: { type: String, enum: ["car", "walker"], required: true },
     transport_number: { type: String }, // For car transport, might not be used for walkers

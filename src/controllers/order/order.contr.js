@@ -44,7 +44,7 @@ const orderController = {
         price: totalPrice,
         user: user_id,
         deliver: deliver._id,
-        status: "in_store",
+        status: "pending",
       });
 
       // Save the order

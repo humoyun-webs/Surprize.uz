@@ -1,15 +1,18 @@
 import mongoose from "mongoose";
 import Store from "../stores/stores.model.js"; // Assuming you have a Store model
 
-const adminSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  age: { type: Number },
-  role: { type: String, enum: ["admin", "store_admin"], required: true },
-  contract: { type: mongoose.Schema.Types.ObjectId, ref: "Contract" },
-  store: { type: mongoose.Schema.Types.ObjectId, ref: "Store" }, // Changed to single store reference
-  phone: { type: String, unique: true, required: true },
-  password: { type: String, required: true, minlength: 6 },
-});
+const adminSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    age: { type: Number },
+    role: { type: String, enum: ["admin", "store_admin"], required: true },
+    contract: { type: mongoose.Schema.Types.ObjectId, ref: "Contract" },
+    store: { type: mongoose.Schema.Types.ObjectId, ref: "Store" }, // Changed to single store reference
+    phone: { type: String, unique: true, required: true },
+    password: { type: String, required: true, minlength: 6 },
+  },
+  { timestamps: true }
+);
 
 adminSchema.pre("save", async function (next) {
   if (this.isNew) {

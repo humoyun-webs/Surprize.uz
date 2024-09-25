@@ -8,7 +8,8 @@ const userSchema = Joi.object({
   password: Joi.string().required(), // Password is required
   location: Joi.string().optional(),
   code: Joi.string().optional(),
-  age: Joi.number().optional(),
+  birthday: Joi.date().optional(),
+  gender: Joi.string().valid("male", "female").optional(),
 });
 
 const updateUserSchema = Joi.object({
@@ -16,7 +17,8 @@ const updateUserSchema = Joi.object({
   phone: Joi.string().optional(),
   password: Joi.string().optional(),
   location: Joi.string().optional(),
-  age: Joi.number().optional(),
+  birthday: Joi.date().optional(),
+  gender: Joi.string().valid("male", "female").optional(),
 });
 
 const userMiddleware = {

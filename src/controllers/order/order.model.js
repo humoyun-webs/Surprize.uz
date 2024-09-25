@@ -14,8 +14,8 @@ const orderSchema = new mongoose.Schema(
     price: { type: Number, required: true },
     status: {
       type: String,
-      enum: ["in_store", "delivering", "arrived","done"],
-      default: "in_store",
+      enum: ["pending", "in_store", "delivering", "arrived", "done"],
+      default: "pending",
     },
     user: {
       type: Schema.Types.ObjectId,

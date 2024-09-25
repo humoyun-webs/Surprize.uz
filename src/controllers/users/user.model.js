@@ -1,21 +1,30 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  age: { type: Number },
-  location: { type: String },
-  password: { type: String },
-  phone: { type: String, required: true ,unique:true },
-  favorite: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Product'
-  }],
-  orders: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Order'
-  }]
-});
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    age: { type: Number },
+    location: { type: String },
+    password: { type: String },
+    phone: { type: String, required: true, unique: true },
+    birthday: { type: Date },
+  gender: { type: String, enum: ['male', 'female']},
+    favorite: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    orders: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Order",
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 const User = mongoose.model("User", userSchema);
 

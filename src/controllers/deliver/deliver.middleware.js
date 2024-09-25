@@ -5,7 +5,7 @@ import Deliver from "./deliver.model.js";
 const deliverSchema = Joi.object({
   name: Joi.string().required(),
   transport_type: Joi.string().valid("car", "walker").required(),
-  number: Joi.string().required(),
+  phone: Joi.string().required(),
   password: Joi.string().required(),
   age: Joi.number().optional(),
   description: Joi.string().optional(),
@@ -14,7 +14,7 @@ const deliverSchema = Joi.object({
 const deliverSchemaUpdate = Joi.object({
   name: Joi.string().optional(),
   transport_type: Joi.string().valid("car", "walker").optional(),
-  number: Joi.string().optional(),
+  phone: Joi.string().optional(),
   password: Joi.string().optional(),
   age: Joi.number().optional(),
   description: Joi.string().optional(),
@@ -30,7 +30,7 @@ const deliverMiddleware = {
       return res.status(400).json({ message: error.details[0].message });
     }
          const existingDeliver = await Deliver.findOne({
-           number: req.body.number
+           phone: req.body.phone,
          });
          if (existingDeliver) {
            return res
@@ -47,7 +47,7 @@ const deliverMiddleware = {
       return res.status(400).json({ message: error.details[0].message });
     }
          const existingDeliver = await Deliver.findOne({
-           number: req.body.number,
+           phone: req.body.phone,
            _id: { $ne: req.params.id },
          });
          if (existingDeliver) {
@@ -58,6 +58,8 @@ const deliverMiddleware = {
         
     next(); // Proceed to the next middleware or controller
   },
+ 
+  
 };
 
 export default deliverMiddleware;

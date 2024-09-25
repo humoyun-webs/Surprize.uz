@@ -9,14 +9,14 @@ import bcrypt from "bcrypt";
 const router = express.Router();
 router.post("/", async (req, res) => {
   try {
-    const { number, password } = req.body;
-    if (!number || !password) {
+    const { phone, password } = req.body;
+    if (!phone || !password) {
       return res.status(400).json({ error: "Invalid data" });
     }
 
     // Check if it's a user
     {//user
-      let user = await User.findOne({ number: number });
+      let user = await User.findOne({ phone: phone });
       let isUser = user
         ? await bcrypt.compare(password, user?.password)
         : false;
@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
     // Check if it's an admin
     {//admin
       let admin = await Admin.findOne({
-        phone: number,
+        phone: phone,
       });
 
       let isAdmin = admin
@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
     // Check if it's a deliverer
     {//deliver
       let deliver = await Deliver.findOne({
-        phone: number,
+        phone: phone,
       });
       let isDeliver = deliver
         ? await bcrypt.compare(password, deliver?.password)
