@@ -2,7 +2,7 @@ import { imgUpload } from "../../utils/fileUpload.js";
 import Store from "./stores.model.js";
 
 export default {
-  async get(req, res) {
+  async getOrders(req, res) {
     try {
       const storeId = req.store._id;
       const { filter } = req.query;
@@ -50,7 +50,15 @@ export default {
       res.status(500).json({ message: "Error fetching store orders", error });
     }
   },
-
+  async get(req, res) {
+    try {
+      const store = await Store.find();
+      
+      res.json(store);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get store" });
+    }
+  },
   async getById(req, res) {
     try {
       const store = await Store.findById(req.params.id);
@@ -82,8 +90,6 @@ export default {
       description_ru,
       phone,
       location,
-      reviews,
-      products,
       id_name,
     } = req.body;
     const { files: file } = req; // Assuming you're using multer or a similar middleware for file uploads
@@ -97,8 +103,9 @@ export default {
       }
       // Handle image upload
       let imagePath = undefined;
-      if (file.image) {
-        imagePath = await imgUpload(file, id, "store"); // 'store' type for image upload
+      if (file?.image) {
+        imagePath = await imgUpload(file, id, "store");
+        
       }
 
       const updateData = {
@@ -113,7 +120,7 @@ export default {
         phone: phone || existingStore.phone,
         location: location || existingStore.location,
         id_name: id_name || existingStore.id_name,
-        ...(imagePath && { image: imagePath }), // Add image path only if it's updated
+        ...({ image: imagePath?.data }),
       };
 
       // Find and update the store

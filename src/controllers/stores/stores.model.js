@@ -19,6 +19,12 @@ const storeSchema = new mongoose.Schema(
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
     rating: { type: Number, default: 0 },
     products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    orders: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Order", // Assuming you have an Order model
+      },
+    ],
   },
   { timestamps: true }
 );

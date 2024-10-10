@@ -22,10 +22,12 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    fromStore: {
+      type: Boolean
+    },
     deliver: {
       type: Schema.Types.ObjectId,
-      ref: "Deliver",
-      required: true,
+      ref: "Deliver"
     },
   },
   { timestamps: true }

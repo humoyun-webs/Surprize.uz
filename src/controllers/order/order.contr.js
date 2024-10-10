@@ -2,7 +2,7 @@ import Order from "./order.model.js";
 import Deliver from "../deliver/deliver.model.js";
 import User from "../users/user.model.js";
 import Product from "../products/product.model.js";
-
+import Store from "../stores/stores.model.js"
 const orderController = {
   async createOrder(req, res) {
     try {
@@ -13,11 +13,11 @@ const orderController = {
       const user = await User.findById(user_id);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
-      }
+      } 
 
       // Find deliverer based on transport type
       const deliver = await Deliver.findOne({ transport_type });
-      if (!deliver) {
+      if (!deliver) {  
         return res
           .status(404)
           .json({
@@ -53,6 +53,16 @@ const orderController = {
       // Push the order to user's orders
       user.orders.push(savedOrder._id);
       await user.save();
+
+      for (const productId of products) {
+        const product = await Product.findById(productId);
+        if (product) {
+          const storeId = product.store;
+          let foo = await Store.findById(storeId)
+          foo.orders.push(newOrder._id);
+          await foo.save()
+        }
+      }
       deliver.history.push(savedOrder._id);
       await deliver.save();
 

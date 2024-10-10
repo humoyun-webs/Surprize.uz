@@ -68,7 +68,7 @@ if (invalidType) {
         });
 
         // Store the relative path of the uploaded image
-        imgPaths.push(`public${uploadDirs[type]}${uniqueFileName}`);
+        imgPaths.push(`/upload${uploadDirs[type]}${uniqueFileName}`);
 
       })
     );
