@@ -10,6 +10,10 @@ const deliverSchema = Joi.object({
   age: Joi.number().optional(),
   description: Joi.string().optional(),
   transport_number: Joi.string().optional(),
+  metro_lines: Joi.array()
+    .items(Joi.string().valid("Chilanzar", "Uzbekistan", "Unusabad", "Qoyliq"))
+    .min(1)
+    .unique(),
 });
 const deliverSchemaUpdate = Joi.object({
   name: Joi.string().optional(),
@@ -19,6 +23,10 @@ const deliverSchemaUpdate = Joi.object({
   age: Joi.number().optional(),
   description: Joi.string().optional(),
   transport_number: Joi.string().optional(),
+  metro_lines: Joi.array()
+    .items(Joi.string().valid("Chilanzar", "Uzbekistan", "Unusabad", "Qoyliq"))
+    .min(1)
+    .unique(),
 });
 
 const deliverMiddleware = {

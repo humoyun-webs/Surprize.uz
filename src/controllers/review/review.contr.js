@@ -6,16 +6,16 @@ const reviewController = {
   // Create a new review
   async create(req, res) {
   try {
-    const { user_id, product_id, rating, comment } = req.body;
+    const { product : product_id, rating, comment } = req.body;
 
     // Create and save the review
     const product = await Product.findById(product_id);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-
+ 
     const storeId = product.store;
-    const review = new Review({ user: user_id, product: product_id, rating, comment });
+    const review = new Review({ user: req.id, product: product_id, rating, comment });
     await review.save();
 
     // Add review to product and store

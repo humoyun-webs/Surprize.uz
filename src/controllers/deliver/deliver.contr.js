@@ -1,6 +1,7 @@
 import Order from "../order/order.model.js";
 import Deliver from "./deliver.model.js"; // Adjust the path as necessary
 import bcrypt from "bcrypt";
+
 const deliverController = {
   // Add a new deliver
   async create(req, res) {
@@ -13,6 +14,7 @@ const deliverController = {
         password,
         transport_type,
         transport_number,
+        metro_lines
       } = req.body;
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -25,6 +27,7 @@ const deliverController = {
         password: hashedPassword,
         transport_type,
         transport_number,
+        metro_lines,
       });
 
       await deliver.save();
@@ -90,7 +93,7 @@ const deliverController = {
       const { filter } = req.query;
 
       let matchCriteria = {};
-
+ 
       const startOfToday = new Date();
       startOfToday.setUTCHours(0, 0, 0, 0);
       const yesterday = new Date();

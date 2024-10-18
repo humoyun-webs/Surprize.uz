@@ -6,7 +6,7 @@ const userSchema = Joi.object({
   name: Joi.string().required(),
   phone: Joi.string().required(), // Assuming this is a string, could be a phone number
   password: Joi.string().required(), // Password is required
-  location: Joi.string().optional(),
+  location: Joi.array().optional(),
   code: Joi.string().optional(),
   birthday: Joi.date().optional(),
   gender: Joi.string().valid("male", "female").optional(),
@@ -16,7 +16,7 @@ const updateUserSchema = Joi.object({
   name: Joi.string().optional(),
   phone: Joi.string().optional(),
   password: Joi.string().optional(),
-  location: Joi.string().optional(),
+  location: Joi.array().optional(),
   birthday: Joi.date().optional(),
   gender: Joi.string().valid("male", "female").optional(),
 });

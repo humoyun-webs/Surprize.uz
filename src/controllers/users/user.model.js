@@ -5,11 +5,11 @@ const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     age: { type: Number },
-    location: { type: String },
+    location: [{ name: String, location: String }],
     password: { type: String },
     phone: { type: String, required: true, unique: true },
     birthday: { type: Date },
-  gender: { type: String, enum: ['male', 'female']},
+    gender: { type: String, enum: ["male", "female"] },
     favorite: [
       {
         type: Schema.Types.ObjectId,
