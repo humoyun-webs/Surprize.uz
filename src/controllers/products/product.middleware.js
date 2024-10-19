@@ -8,6 +8,7 @@ const productSchema = Joi.object({
   name_ru: Joi.string(),
   description_uz: Joi.string(),
   description_ru: Joi.string(),
+  images: Joi.array(),
   id_name: Joi.string().alphanum().min(3).max(50),
   category_id: Joi.string().required(), // ObjectId pattern
   count: Joi.number().integer().min(0).required(),
@@ -17,6 +18,7 @@ const productSchema = Joi.object({
 const UpdateProductSchema = Joi.object({
   name_uz: Joi.string(),
   name_ru: Joi.string(),
+  images: Joi.array(),
   description_uz: Joi.string(),
   description_ru: Joi.string(),
   id_name: Joi.string().alphanum().min(3).max(50),

@@ -56,12 +56,12 @@ export default {
         price,
       });
 
-      if (file.images) {
+      if (file?.images) {
         imagePaths = await imgUpload(file, product._id, "product");
         if (!imagePaths.success)
           return res.status(400).json({ error: imagePaths.error });
       }
-      product.images = imagePaths.data;
+      product.images = imagePaths?.data;
       await product.save();
 
       await req.category.updateOne({
@@ -137,12 +137,12 @@ export default {
         }
       }
 
-      if (file.images) {
+      if (file?.images) {
         imagePaths = await imgUpload(file, product._id, "product");
         if (!imagePaths.success) {
           return res.status(400).json({ error: imagePaths.error });
         }
-        product.images = imagePaths.data;
+        product.images = imagePaths?.data;
       }
 
       await product.save();
