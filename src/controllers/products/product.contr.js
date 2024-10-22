@@ -144,7 +144,7 @@ export default {
         }
         product.images = imagePaths?.data;
       }
-
+ 
       await product.save();
 
       // Update category and store if they exist

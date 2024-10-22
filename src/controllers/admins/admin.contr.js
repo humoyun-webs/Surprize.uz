@@ -27,7 +27,7 @@ login: async (req, res) => {
 
   async get(req, res) {
     try {
-      const admins = await Admin.find().populate("contract");
+      const admins = await Admin.find()
       if(!admins) return res.status(402).json({message:'Data is not found !'})
       res.json(admins);
     } catch (error) {
@@ -38,7 +38,7 @@ login: async (req, res) => {
 
   async getById(req, res) {
     try {
-      const admin = await Admin.findById(req.params.id).populate("contract");
+      const admin = await Admin.findById(req.params.id)
       if (!admin) {
         return res.status(404).json({ error: "Admin not found" });
       }
