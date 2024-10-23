@@ -72,14 +72,19 @@ login: async (req, res) => {
 
   async update(req, res) {
     try {
+      let { password } = req.body;
+      req.body.password = password
+        ? await bcrypt.hash(password, 10)
+        : undefined;
       const admin = await Admin.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
-      }).populate("contract");
+      });
       if (!admin) {
         return res.status(404).json({ error: "Admin not found" });
       }
       res.json(admin);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: "Failed to update admin" });
     }
   },
