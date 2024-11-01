@@ -12,6 +12,7 @@ export async function imgUpload(file, ID, type = "profile") {
     profile: "/profileImgs/",
     store: "/storeImgs/",
     product: "/productImgs/",
+    banner: "/bannerImgs/",
   };
 
   try {
@@ -27,7 +28,7 @@ export async function imgUpload(file, ID, type = "profile") {
     let uploadDir = "/src/public" + (uploadDirs[type] || "/otherImgs/");
 
     // Handle single or multiple image files
-    let images = file.images || file.image;
+    let images = file.images || file.image || file.img;
     images = Array.isArray(images) ? images : [images];
 
     
@@ -72,8 +73,6 @@ if (invalidType) {
 
       })
     );
-
-    // Return the file(s) path(s) based on the type of upload
     imgPaths = (type == "product")?imgPaths:imgPaths[0];
     return {
       success: true,

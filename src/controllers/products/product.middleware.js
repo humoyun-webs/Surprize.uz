@@ -2,6 +2,7 @@ import Joi from "joi";
 import Product from "./product.model.js"; // Adjust path as necessary
 import Category from "../category/category.model.js"; // Adjust path as necessary
 import Store from "../stores/stores.model.js"; // Adjust path as necessary
+import SubCategory from "../sub-category/sub-category.model.js";
 
 const productSchema = Joi.object({
   name_uz: Joi.string().required(),
@@ -14,6 +15,7 @@ const productSchema = Joi.object({
   count: Joi.number().integer().min(0).required(),
   price: Joi.number().greater(0).required(),
   store_id: Joi.string().required(), // Assuming you have a store_id
+  gender: Joi.string().valid("male", "female", "kids", "all"),
 });
 const UpdateProductSchema = Joi.object({
   name_uz: Joi.string(),
@@ -22,10 +24,11 @@ const UpdateProductSchema = Joi.object({
   description_uz: Joi.string(),
   description_ru: Joi.string(),
   id_name: Joi.string().alphanum().min(3).max(50),
-  category_id: Joi.string(), // ObjectId pattern
+  category_id: Joi.string(),
   count: Joi.number().integer().min(0),
   price: Joi.number().greater(0),
-  store_id: Joi.string(), // Assuming you have a store_id
+  store_id: Joi.string(),
+  gender: Joi.string().valid("male", "female", "kids", "all"),
 });
 
 
@@ -49,7 +52,7 @@ export default {
     }
 
     // Step 3: Check if category exists
-    const category = await Category.findById(req.body.category_id);
+    const category = await SubCategory.findById(req.body.category_id);
     if (!category) {
       return res.status(404).json({ message: "Category not found." });
     }
@@ -89,7 +92,7 @@ export default {
     }
 
     // Step 3: Check if category exists
-    const category = await Category.findById(req.body.category_id);
+    const category = await SubCategory.findById(req.body.category_id);
     if (!category) {
       return res.status(404).json({ message: "Category not found." });
     }

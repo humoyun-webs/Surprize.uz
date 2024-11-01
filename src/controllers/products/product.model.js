@@ -22,6 +22,7 @@ const productSchema = new mongoose.Schema({
   count: { type: Number },
   id_name: { type: String, unique: true },
   store: { type: mongoose.Schema.Types.ObjectId, ref: "Store" },
+  gender: { type: String, enum: ['male', 'female', 'kids', 'all'],default:"all" }
 });
  
 productSchema.pre("save", async function (next) {

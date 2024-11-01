@@ -4,7 +4,21 @@ import Category from "../category/category.model.js";
 export default {
   async get(req, res) {
     try {
-      const products = await Product.find()
+      const query = {};
+
+      Object.keys(req.query).forEach((key) => {
+        if (key === "minPrice" || key === "maxPrice") {
+          query.price = {
+            ...query.price,
+            ...(key === "minPrice" && { $gte: req.query.minPrice }),
+            ...(key === "maxPrice" && { $lte: req.query.maxPrice }),
+          };
+        } else {
+          query[key] = req.query[key];
+        }
+      });
+ 
+      const products = await Product.find(query);
       res.json(products);
     } catch (error) {
       res.status(500).json({ error: "Failed to get products" });
@@ -36,6 +50,7 @@ export default {
         description_ru,
         category_id,
         store_id,
+        gender,
         count,
         id_name,
       } = req.body;
@@ -52,6 +67,7 @@ export default {
         category: category_id,
         store: store_id,
         count,
+        gender,
         id_name,
         price,
       });
@@ -64,9 +80,17 @@ export default {
       product.images = imagePaths?.data;
       await product.save();
 
-      await req.category.updateOne({
+      
+        await req.category.updateOne({
         $push: { products: product._id },
-      });
+        });
+      await Category.findOneAndUpdate(
+        { subCategories: { $in: [category_id] } },
+        { $push: { products: product._id } },
+        { new: true }
+      );
+
+
       await req.store.updateOne({
         $push: { products: product._id },
       });
@@ -91,6 +115,7 @@ export default {
         description_ru,
         category_id,
         store_id,
+        gender,
         count,
         id_name,
       } = req.body;
@@ -113,6 +138,7 @@ export default {
         category_id: "category",
         store_id: "store",
         count: "count",
+        gender:"gender",
         id_name: "id_name",
         price: "price",
       };
@@ -123,8 +149,6 @@ export default {
           { _id: product.category },
           { $pull: { products: product._id } }
         );
-
-        
         await Category.updateOne(
           { _id: category_id },
           { $push: { products: product._id } }
