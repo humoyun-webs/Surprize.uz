@@ -61,7 +61,7 @@ export default {
   },
   async getById(req, res) {
     try {
-      const store = await Store.findById(req.params.id);
+      const store = await Store.findById(req.params.id).populate("products");
       if (!store) {
         return res.status(404).json({ error: "Store not found" });
       }
