@@ -4,10 +4,14 @@ import router from "../controllers/index.routes.js";
 import fileUpload from 'express-fileupload'
 import cors from 'cors'
 import bodparser from 'body-parser'
-// import fileUpload from "";
+import http from 'http';
+import { initSocket } from '../socket/socket.js'; // Import the socket setup function
 
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
+const server = http.createServer(app);
+initSocket(server);  
+
 
 app.use(express.json());
 app.use("/upload", express.static(`${process.cwd()}/src/public`));

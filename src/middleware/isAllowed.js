@@ -18,7 +18,7 @@ export default {
         return res.status(403).json({ message: "Forbidden" });
       }
 
-      const isAdmin = admin.role === "admin";
+      const isAdmin = ["store_admin","admin"].includes(admin.role);
       const hasStore = admin.store == editingStoreId;
 
       if (isAdmin || hasStore) {

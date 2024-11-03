@@ -4,56 +4,60 @@ import Store from "./stores.model.js";
 export default {
   async getOrders(req, res) {
     try {
-      const storeId = req.store._id;
-      const { filter } = req.query;
-
-      let matchCriteria = {};
-
-      if (filter === "today") {
-        const startOfToday = new Date();
-        startOfToday.setHours(0, 0, 0, 0);
-        const now = new Date();
-
-        matchCriteria = {
-          createdAt: { $gte: startOfToday, $lte: now },
-          status: { $ne: "delivering" },
-        };
-      } else if (filter === "tomorrow") {
-        const startOfToday = new Date();
-        startOfToday.setHours(0, 0, 0, 0);
-
-        const startOfTomorrow = new Date(startOfToday);
-        startOfTomorrow.setDate(startOfTomorrow.getDate() + 1);
-
-        const endOfTomorrow = new Date(startOfTomorrow);
-        endOfTomorrow.setDate(endOfTomorrow.getDate() + 1);
-
-        matchCriteria = {
-          createdAt: { $gte: startOfToday, $lt: endOfTomorrow },
-          status: { $ne: "delivering" },
-        };
-      } else if (filter === "done") {
-        matchCriteria = { status: "arrived" };
-      } else {
-        // Fetch all orders if no specific filter
-        matchCriteria = {};
+      const storeId = req.admin.store;
+      if (!storeId) {
+      return  res.status(400).json({ message: "This is only for store admins" });
       }
 
-      // Fetch the store orders based on the criteria
-      const store = await Store.findById(storeId).populate({
-        path: "orders",
-        match: matchCriteria,
-      });
+     const { filter } = req.query;
 
-      res.status(200).json(store.orders);
+     let matchCriteria = {};
+
+     const startOfToday = new Date();
+     startOfToday.setUTCHours(0, 0, 0, 0);
+     const yesterday = new Date();
+     yesterday.setUTCHours(0, 0, 0, 0);
+     yesterday.setDate(yesterday.getDate() - 1);
+     const endOfToday = new Date();
+     endOfToday.setUTCHours(23, 59, 59, 999);
+
+     if (filter === "today") {
+       matchCriteria = {
+         createdAt: { $gte: yesterday, $lte: startOfToday },
+         status: { $ne: "done" },
+       };
+     } else if (filter === "tomorrow") {
+       matchCriteria = { createdAt: { $gte: startOfToday, $lte: endOfToday } };
+     } else if (filter === "done") {
+       matchCriteria = { status: "done" };
+     } else {
+       matchCriteria = {};
+     }
+
+
+     // Fetch the store to get the products array for filtering
+     const store = await Store.findById(storeId);
+
+     // Populate orders with matching criteria and filter products within those orders
+     const populatedStore = await Store.findById(storeId).populate({
+       path: "orders",
+       match: matchCriteria,
+       populate: {
+         path: "products",
+         match: { _id: { $in: store.products } },
+       },
+     });
+
+      res.status(200).json(populatedStore.orders);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ message: "Error fetching store orders", error });
     }
   },
   async get(req, res) {
     try {
       const store = await Store.find();
-      
+
       res.json(store);
     } catch (error) {
       res.status(500).json({ error: "Failed to get store" });
@@ -105,7 +109,6 @@ export default {
       let imagePath = undefined;
       if (file?.image) {
         imagePath = await imgUpload(file, id, "store");
-        
       }
 
       const updateData = {
@@ -120,7 +123,7 @@ export default {
         phone: phone || existingStore.phone,
         location: location || existingStore.location,
         id_name: id_name || existingStore.id_name,
-        ...({ image: imagePath?.data }),
+        ...{ image: imagePath?.data },
       };
 
       // Find and update the store

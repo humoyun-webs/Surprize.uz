@@ -6,7 +6,12 @@ const subCategorySchema = new mongoose.Schema({
     ru: { type: String, required: true }, // Russian name
   },
   products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
-  gender: { type: String, enum: ["male", "female", "kids", "all"] },
+  main_category:{ type: mongoose.Schema.Types.ObjectId, ref: "Category" },
+  gender: {
+    type: [String],
+    enum: ["male", "female", "kids"],
+    required: true,
+  },
 });
 
 const SubCategory = mongoose.model("SubCategory", subCategorySchema);

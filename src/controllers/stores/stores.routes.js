@@ -4,12 +4,20 @@ import { storeMiddleware } from "./store.middleware.js";
 import isAllowed  from "../../middleware/isAllowed.js";
 
 const router = express.Router();
-let { get, getById, create, update, delete: deleteStore } = storeController;
+let {
+  get,
+  getById,
+  create,
+  update,
+  delete: deleteStore,
+  getOrders,
+} = storeController;
 
 let { checkTokenForStore } = isAllowed;
 let { checkStoreUpdate } = storeMiddleware;
 
 router.get("/", get);
+router.get("/orders", checkTokenForStore,getOrders);
 router.get("/:id", getById);
 router.post("/", create);
 router.put("/:id", checkTokenForStore, checkStoreUpdate, update);

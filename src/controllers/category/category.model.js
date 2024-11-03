@@ -7,7 +7,11 @@ const categorySchema = new mongoose.Schema({
   },
   products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
   subCategories: [{ type: mongoose.Schema.Types.ObjectId, ref: "SubCategory" }],
-  gender: { type: String, enum: ["male", "female", "kids", "all"] },
+  gender: {
+    type: [String],
+    enum: ["male", "female", "kids"],
+    required: true,
+  },
 });
 
 const Category = mongoose.model("Category", categorySchema);

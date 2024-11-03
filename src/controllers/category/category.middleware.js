@@ -1,38 +1,36 @@
 import Category from "./category.model.js";
- 
+import Joi from "joi";
+
 export default {
   validateCategoryData: async function (req, res, next) {
     try {
-      const { name_uz, name_ru } = req.body;
-
-      // Check if required fields are provided
-      if (!name_uz || !name_ru) {
-        return res
-          .status(400)
-          .json({ error: "Both name_uz and name_ru are required" });
+      let JOIschema = schemas[req.method];
+      const { error } = JOIschema.validate(req.body);
+      if (error) {
+        return res.status(400).json({ message: error.details[0].message });
       }
-
-      // Check if category with the same Uzbek or Russian name already exists
-      const existingCategory = await Category.findOne({
-        $and: [
-          {
-            $or: [{ "name.uz": name_uz }, { "name.ru": name_ru }],
-          },
-          { _id: { $ne: req.params?.id } }, // Exclude the current category
-        ],
-      });
-
-      if (existingCategory) {
-        return res
-          .status(400)
-          .json({ error: "Category with the same name already exists" });
-      }
-
-      // Proceed to the next middleware or route handler if validation passes
       next();
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: "Server error" });
     }
   },
+};
+
+let schemas = {
+  POST: Joi.object({
+    name_uz: Joi.string().required(),
+    name_ru: Joi.string().required(),
+    gender: Joi.array()
+      .items(Joi.string().valid("male", "female", "kids"))
+      .min(1)
+      .required(),
+  }),
+  PUT: Joi.object({
+    name_uz: Joi.string(),
+    name_ru: Joi.string(),
+    gender: Joi.array()
+      .items(Joi.string().valid("male", "female", "kids"))
+      .min(1),
+  }),
 };

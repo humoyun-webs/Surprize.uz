@@ -13,7 +13,7 @@ const {
   del
 } = categoryController;
 const { isAdmin } = isAllowed;
-const { validateCategoryData } = categoryMiddleware;
+const { validateCategoryData  } = categoryMiddleware;
 
 router.get("/", get);
 router.get("/:id", getById); 
