@@ -9,7 +9,6 @@ export default {
     if (!token) {
       return res.status(403).json({ message: "Forbidden" });
     }
-
     try {
       const decoded = JWT.VERIFY(token);
       const admin = await Admin.findById(decoded.id);

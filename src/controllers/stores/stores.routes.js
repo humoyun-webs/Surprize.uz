@@ -11,15 +11,19 @@ let {
   update,
   delete: deleteStore,
   getOrders,
+  addBox,
+  getBoxNumber,
 } = storeController;
 
-let { checkTokenForStore } = isAllowed;
+let { checkTokenForStore ,isAdmin} = isAllowed;
 let { checkStoreUpdate } = storeMiddleware;
 
 router.get("/", get);
 router.get("/orders", checkTokenForStore,getOrders);
+router.get("/box", isAdmin, getBoxNumber);
 router.get("/:id", getById);
 router.post("/", create);
+router.post("/box/:id",isAdmin, addBox);
 router.put("/:id", checkTokenForStore, checkStoreUpdate, update);
 router.delete("/:id", checkTokenForStore, deleteStore);
 

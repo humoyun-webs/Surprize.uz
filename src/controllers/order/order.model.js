@@ -17,6 +17,10 @@ const orderSchema = new mongoose.Schema(
       enum: ["pending", "in_store", "delivering", "arrived", "done"],
       default: "pending",
     },
+    box: {
+      type: String,
+      enum: ["standart", "premium"],
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",

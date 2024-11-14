@@ -1,5 +1,5 @@
 import SubCategory from "../sub-category/sub-category.model.js";
-import Category from "./category.model.js"; // Adjust path as necessary
+import Category from "./category.model.js"; 
 
 export default {
   get: async function (req, res) {

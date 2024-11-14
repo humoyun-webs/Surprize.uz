@@ -13,7 +13,8 @@ const orderSchema = Joi.object({
         "any.only": "For walker, location must be one of the metro stations",
       }),
   }),
-  transport_type: Joi.string().valid("car", "walker", "fromStore").required(),
+  transport_type: Joi.string().valid("car", "walker").required(),
+  box: Joi.string().valid("standart", "premium").required(),
 });
 
 const orderMiddleware = {

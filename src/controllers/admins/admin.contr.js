@@ -34,6 +34,15 @@ login: async (req, res) => {
       res.status(500).json({ error: "Failed to get admins" });
     }
   },
+  async getProfile(req, res) {
+    try {
+      const admins = await Admin.findById(req.admin).populate('store')
+      if(!admins) return res.status(402).json({message:'Data is not found !'})
+      res.json(admins);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get admins" });
+    }
+  },
 
 
   async getById(req, res) {

@@ -6,47 +6,48 @@ export default {
     try {
       const storeId = req.admin.store;
       if (!storeId) {
-      return  res.status(400).json({ message: "This is only for store admins" });
+        return res
+          .status(400)
+          .json({ message: "This is only for store admins" });
       }
 
-     const { filter } = req.query;
+      const { filter } = req.query;
 
-     let matchCriteria = {};
+      let matchCriteria = {};
 
-     const startOfToday = new Date();
-     startOfToday.setUTCHours(0, 0, 0, 0);
-     const yesterday = new Date();
-     yesterday.setUTCHours(0, 0, 0, 0);
-     yesterday.setDate(yesterday.getDate() - 1);
-     const endOfToday = new Date();
-     endOfToday.setUTCHours(23, 59, 59, 999);
+      const startOfToday = new Date();
+      startOfToday.setUTCHours(0, 0, 0, 0);
+      const yesterday = new Date();
+      yesterday.setUTCHours(0, 0, 0, 0);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const endOfToday = new Date();
+      endOfToday.setUTCHours(23, 59, 59, 999);
 
-     if (filter === "today") {
-       matchCriteria = {
-         createdAt: { $gte: yesterday, $lte: startOfToday },
-         status: { $ne: "done" },
-       };
-     } else if (filter === "tomorrow") {
-       matchCriteria = { createdAt: { $gte: startOfToday, $lte: endOfToday } };
-     } else if (filter === "done") {
-       matchCriteria = { status: "done" };
-     } else {
-       matchCriteria = {};
-     }
+      if (filter === "today") {
+        matchCriteria = {
+          createdAt: { $gte: yesterday, $lte: startOfToday },
+          status: { $ne: "done" },
+        };
+      } else if (filter === "tomorrow") {
+        matchCriteria = { createdAt: { $gte: startOfToday, $lte: endOfToday } };
+      } else if (filter === "done") {
+        matchCriteria = { status: "done" };
+      } else {
+        matchCriteria = {};
+      }
 
+      // Fetch the store to get the products array for filtering
+      const store = await Store.findById(storeId);
 
-     // Fetch the store to get the products array for filtering
-     const store = await Store.findById(storeId);
-
-     // Populate orders with matching criteria and filter products within those orders
-     const populatedStore = await Store.findById(storeId).populate({
-       path: "orders",
-       match: matchCriteria,
-       populate: {
-         path: "products",
-         match: { _id: { $in: store.products } },
-       },
-     });
+      // Populate orders with matching criteria and filter products within those orders
+      const populatedStore = await Store.findById(storeId).populate({
+        path: "orders",
+        match: matchCriteria,
+        populate: {
+          path: "products",
+          match: { _id: { $in: store.products } },
+        },
+      });
 
       res.status(200).json(populatedStore.orders);
     } catch (error) {
@@ -57,6 +58,15 @@ export default {
   async get(req, res) {
     try {
       const store = await Store.find();
+
+      res.json(store);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to get store" });
+    }
+  },
+  async getBoxNumber(req, res) {
+    try {
+      const store = await Store.find().select("name boxes phone image location");
 
       res.json(store);
     } catch (error) {
@@ -140,6 +150,28 @@ export default {
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Failed to update store" });
+    }
+  },
+  async addBox(req, res) {
+    const { id } = req.params;
+    let { premium, standart } = req.body;
+    try {
+      const existingStore = await Store.findById(id);
+      if (!existingStore) {
+        return res.status(404).json({ message: "Store not found" });
+      }
+      existingStore.boxes.premium =
+        premium * 1 + existingStore.boxes.premium * 1;
+      existingStore.boxes.standart =
+        standart * 1 + existingStore.boxes.standart * 1;
+      // existingStore.boxes.standart+=standart
+
+      await existingStore.save();
+
+      res.json(existingStore);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Failed to add box" });
     }
   },
 

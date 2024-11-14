@@ -8,18 +8,14 @@ import { getLineByStation } from "../../utils/data.js";
 const orderController = {
   async createOrder(req, res) {
     try {
-      const { products, location, transport_type } = req.body;
-      const user_id = req.user.id; // Get user ID from req.user
+      const { products, location, transport_type, box } = req.body;
+      const user_id = req.user.id;
 
-      // Find user
       const user = await User.findById(user_id);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // Find deliverer based on transport type
-
-      // Calculate total price based on products
       let totalPrice = 0;
       for (const productId of products) {
         const product = await Product.findById(productId);
@@ -28,7 +24,14 @@ const orderController = {
             .status(404)
             .json({ message: `Product not found: ${productId}` });
         }
-        totalPrice += product.price; // Assuming product has a price field
+        totalPrice += product.price;
+        product.count = product.count ? product.count * 1 - 1 : 0;
+        const storeId = product.store;
+        let foo = await Store.findById(storeId);
+        foo.boxes[box] = foo.boxes[box] * 1 - 1;
+        foo.orders.push(newOrder._id);
+        await foo.save();
+        await product.save();
       }
 
       let newOrder = new Order({
@@ -36,6 +39,7 @@ const orderController = {
         location,
         price: totalPrice,
         user: user_id,
+        box,
         status: "pending",
       });
 
@@ -43,7 +47,7 @@ const orderController = {
       let deliver =
         transport_type == "car"
           ? await Deliver.findOne({ transport_type })
-          :await orderDivider(metroLine, newOrder._id);
+          : await orderDivider(metroLine, newOrder._id);
 
       if (!deliver) {
         return res.status(404).json({
@@ -57,18 +61,8 @@ const orderController = {
       user.orders.push(savedOrder._id);
       await user.save();
 
-      for (const productId of products) {
-        const product = await Product.findById(productId);
-        if (product) {
-          const storeId = product.store;
-          let foo = await Store.findById(storeId);
-          foo.orders.push(newOrder._id);
-          await foo.save();
-        }
-      }
-     (await deliver).history.push(savedOrder._id);
+      (await deliver).history.push(savedOrder._id);
       (await deliver).save();
-
 
       res.status(201).json(savedOrder);
     } catch (error) {
@@ -96,7 +90,10 @@ const orderController = {
 export default orderController;
 
 async function orderDivider(line, orderId) {
-  const walkers = await Deliver.find({ transport_type:"walker", metro_lines:{$in:[line]} }, { orders: { $slice: -1 } });
+  const walkers = await Deliver.find(
+    { transport_type: "walker", metro_lines: { $in: [line] } },
+    { orders: { $slice: -1 } }
+  );
   const sortedWalkers = await Promise.all(
     walkers.map(async (walker) => {
       const lastOrder = walker.history.length
@@ -114,6 +111,5 @@ async function orderDivider(line, orderId) {
   await Deliver.findByIdAndUpdate(selectedWalker._id, {
     $push: { currentOrders: orderId },
   });
-  return selectedWalker; 
+  return selectedWalker;
 }
- 

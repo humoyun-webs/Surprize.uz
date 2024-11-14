@@ -1,9 +1,9 @@
 import Order from "../order/order.model.js";
-import Deliver from "./deliver.model.js"; // Adjust the path as necessary
+import Deliver from "./deliver.model.js"; 
 import bcrypt from "bcrypt";
 
 const deliverController = {
-  // Add a new deliver
+  
   async create(req, res) {
     try {
       const {
@@ -38,7 +38,7 @@ const deliverController = {
     }
   },
 
-  // Update an existing deliver
+  
   async update(req, res) {
     try {
       const { id } = req.params;
@@ -60,7 +60,7 @@ const deliverController = {
     }
   },
 
-  // Get all delivers
+  
   async getAll(req, res) {
     try {
       const delivers = await Deliver.find();
@@ -71,7 +71,7 @@ const deliverController = {
     }
   },
 
-  // Get deliver by ID
+  
   async getById(req, res) {
     try {
       const { id } = req.params;
@@ -115,7 +115,7 @@ const deliverController = {
         matchCriteria = {};
       }
 
-      // Fetch the deliver's order history based on the criteria
+      
       const deliver = await Deliver.findById(deliverId).populate({
         path: "history",
         match: matchCriteria,

@@ -5,12 +5,12 @@ import fileUpload from 'express-fileupload'
 import cors from 'cors'
 import bodparser from 'body-parser'
 import http from 'http';
-import { initSocket } from '../socket/socket.js'; // Import the socket setup function
+// import { initSocket } from '../socket/socket.js'; // Import the socket setup function
 
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 const server = http.createServer(app);
-initSocket(server);  
+// initSocket(server);  
 
 
 app.use(express.json());

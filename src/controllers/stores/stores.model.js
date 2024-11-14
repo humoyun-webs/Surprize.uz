@@ -25,6 +25,16 @@ const storeSchema = new mongoose.Schema(
         ref: "Order", // Assuming you have an Order model
       },
     ],
+    boxes: {
+      standart: {
+        type: Number,
+        default: 0,
+      },
+      premium: {
+        type: Number,
+        default: 0,
+      },
+    },
   },
   { timestamps: true }
 );
