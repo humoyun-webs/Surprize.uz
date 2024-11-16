@@ -12,6 +12,8 @@ import generalLogin from "./other/login.js"
 import develiverRouter from "./deliver/deliver.routes.js"
 import orderRouter from "./order/order.routes.js"
 import bannerRouter from "./banner/banner.routes.js"
+import sectionRouter from "./sections/section.routes.js";
+
 
  
   
@@ -27,6 +29,7 @@ router.use("/login", generalLogin);
 router.use("/deliver", develiverRouter);
 router.use("/order", orderRouter);
 router.use("/banner", bannerRouter);
+router.use("/sections", sectionRouter);
 
 router.get("/", (req, res) => {
   res.send(`
