@@ -2,7 +2,7 @@ import express from "express";
 import orderController from "./order.contr.js";
 import Auth from "../../middleware/auth.js"
 import orderMiddleware from "./order.middleware.js";
-let { createOrder } = orderController;
+let { createOrder, attachBox } = orderController;
 
 let { UserAuth } = Auth;
 let { validateOrderData } = orderMiddleware;
@@ -11,6 +11,7 @@ const router = express.Router();
 
 // Route to add a new deliver
 router.post("/", UserAuth, validateOrderData, createOrder);
+router.put("/attachBox/:id", attachBox);
 
 // // Route to update an existing deliver by ID
 // router.put("/:id", isDeliverOrAdmin, putMD, update);

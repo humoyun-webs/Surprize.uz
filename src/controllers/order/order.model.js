@@ -17,9 +17,19 @@ const orderSchema = new mongoose.Schema(
       enum: ["pending", "in_store", "delivering", "arrived", "done"],
       default: "pending",
     },
-    box: {
-      type: String,
-      enum: ["standart", "premium"],
+    boxes: {
+      small: {
+        type: Number,
+        default: 0,
+      },
+      medium: {
+        type: Number,
+        default: 0,
+      },
+      big: {
+        type: Number,
+        default: 0,
+      },
     },
     user: {
       type: Schema.Types.ObjectId,
@@ -27,11 +37,11 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     fromStore: {
-      type: Boolean
+      type: Boolean,
     },
     deliver: {
       type: Schema.Types.ObjectId,
-      ref: "Deliver"
+      ref: "Deliver",
     },
   },
   { timestamps: true }

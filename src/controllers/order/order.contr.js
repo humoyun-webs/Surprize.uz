@@ -8,7 +8,7 @@ import { getLineByStation } from "../../utils/data.js";
 const orderController = {
   async createOrder(req, res) {
     try {
-      const { products, location, transport_type, box } = req.body;
+      const { products, location, transport_type } = req.body;
       const user_id = req.user.id;
 
       const user = await User.findById(user_id);
@@ -28,7 +28,6 @@ const orderController = {
         product.count = product.count ? product.count * 1 - 1 : 0;
         const storeId = product.store;
         let foo = await Store.findById(storeId);
-        foo.boxes[box] = foo.boxes[box] * 1 - 1;
         foo.orders.push(newOrder._id);
         await foo.save();
         await product.save();
@@ -39,7 +38,6 @@ const orderController = {
         location,
         price: totalPrice,
         user: user_id,
-        box,
         status: "pending",
       });
 
@@ -78,6 +76,40 @@ const orderController = {
         return res.status(404).json({ error: "Order not found" });
       }
       order.status = status;
+      await order.save();
+      res.status(201).json({ success: true, data: order });
+    } catch (error) {
+      console.error("Error creating order:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  },
+  async attachBox(req, res) {
+    try {
+      const { small, medium, big } = req.body;
+      let order = await Order.findById(req.params?.id);
+      if (!order) {
+        return res.status(404).json({ error: "Order not found" });
+      }
+
+
+      
+
+      let allBoxCount =
+        (small ? small * 1 : 0) +
+        (medium ? medium * 1 : 0) +
+        (big ? big * 1 : 0);
+      if (order.products.length < allBoxCount) {
+     return   res.status(400).json({error: "The number of boxes should not be more than that of products." });
+      }
+        // if (small)
+          order.boxes.small = small
+      
+        // if (medium)
+          order.boxes.medium = medium
+      
+        
+          order.boxes.big = big
+       
       await order.save();
       res.status(201).json({ success: true, data: order });
     } catch (error) {

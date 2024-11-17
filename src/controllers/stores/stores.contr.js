@@ -154,17 +154,17 @@ export default {
   },
   async addBox(req, res) {
     const { id } = req.params;
-    let { premium, standart } = req.body;
+    let { small, medium,big } = req.body;
     try {
       const existingStore = await Store.findById(id);
       if (!existingStore) {
         return res.status(404).json({ message: "Store not found" });
       }
-      existingStore.boxes.premium =
-        premium * 1 + existingStore.boxes.premium * 1;
-      existingStore.boxes.standart =
-        standart * 1 + existingStore.boxes.standart * 1;
-      // existingStore.boxes.standart+=standart
+     if (small)
+       existingStore.boxes.small = small * 1 + existingStore.boxes.small * 1;
+    if (medium)
+      existingStore.boxes.medium = medium * 1 + existingStore.boxes.medium * 1;
+    if (big) existingStore.boxes.big = big * 1 + existingStore.boxes.big * 1;
 
       await existingStore.save();
 

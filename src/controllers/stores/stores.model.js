@@ -26,11 +26,15 @@ const storeSchema = new mongoose.Schema(
       },
     ],
     boxes: {
-      standart: {
+      small: {
         type: Number,
         default: 0,
       },
-      premium: {
+      medium: {
+        type: Number,
+        default: 0,
+      },
+      big: {
         type: Number,
         default: 0,
       },

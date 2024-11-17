@@ -14,7 +14,6 @@ const orderSchema = Joi.object({
       }),
   }),
   transport_type: Joi.string().valid("car", "walker").required(),
-  box: Joi.string().valid("standart", "premium").required(),
 });
 
 const orderMiddleware = {
