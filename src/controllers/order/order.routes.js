@@ -2,16 +2,19 @@ import express from "express";
 import orderController from "./order.contr.js";
 import Auth from "../../middleware/auth.js"
 import orderMiddleware from "./order.middleware.js";
+import isAllowed from "../../middleware/isAllowed.js"
+import adminMiddleware from "../admins/admin.middleware.js";
 let { createOrder, attachBox } = orderController;
 
 let { UserAuth } = Auth;
 let { validateOrderData } = orderMiddleware;
+let { authenticateAdmin } = adminMiddleware;
 
 const router = express.Router();
 
 // Route to add a new deliver
 router.post("/", UserAuth, validateOrderData, createOrder);
-router.put("/attachBox/:id", attachBox);
+router.put("/attachBox/:id",authenticateAdmin, attachBox);
 
 // // Route to update an existing deliver by ID
 // router.put("/:id", isDeliverOrAdmin, putMD, update);

@@ -75,6 +75,7 @@ login: async (req, res) => {
       await admin.save();
         res.status(201).json(admin);
     } catch (error) {
+      console.log(error.message);
       res.status(500).json({ error: 'Failed to create admin' });
     }
   },

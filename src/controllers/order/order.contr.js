@@ -17,6 +17,12 @@ const orderController = {
       }
 
       let totalPrice = 0;
+      let newOrder = new Order({
+        products,
+        location,
+        user: user_id,
+        status: "pending",
+      });
       for (const productId of products) {
         const product = await Product.findById(productId);
         if (!product) {
@@ -28,19 +34,18 @@ const orderController = {
         product.count = product.count ? product.count * 1 - 1 : 0;
         const storeId = product.store;
         let foo = await Store.findById(storeId);
+        if (!foo) {
+          return res.status(404).json({
+            message: `Store not found`,
+          });
+        }
         foo.orders.push(newOrder._id);
-        await foo.save();
         await product.save();
+        await foo.save();
       }
 
-      let newOrder = new Order({
-        products,
-        location,
-        price: totalPrice,
-        user: user_id,
-        status: "pending",
-      });
-
+       newOrder.price=totalPrice
+      
       let metroLine = getLineByStation(location);
       let deliver =
         transport_type == "car"
@@ -90,26 +95,39 @@ const orderController = {
       if (!order) {
         return res.status(404).json({ error: "Order not found" });
       }
+      let storeAdminId = req.admin.id;
+      if (!storeAdminId || !storeAdminId.store) {
+        return res.status(404).json({ error: "This is for Store Admin" });
+      }
 
-
-      
-
+      let store = await Store.findById(storeAdminId.store);
+      let productLength = 0;
+      console.log(store);
+      // order.products.forEach(
+      //   async(e) >
+      //     {
+      //       if( store.products.incules(e)){
+      //         productLength++;
+      //       }
+      //     }
+      // );
       let allBoxCount =
         (small ? small * 1 : 0) +
         (medium ? medium * 1 : 0) +
         (big ? big * 1 : 0);
       if (order.products.length < allBoxCount) {
-     return   res.status(400).json({error: "The number of boxes should not be more than that of products." });
+        return res.status(400).json({
+          error:
+            "The number of boxes should not be more than that of products.",
+        });
       }
-        // if (small)
-          order.boxes.small = small
-      
-        // if (medium)
-          order.boxes.medium = medium
-      
-        
-          order.boxes.big = big
-       
+
+      order.boxes.small = small;
+
+      order.boxes.medium = medium;
+
+      order.boxes.big = big;
+
       await order.save();
       res.status(201).json({ success: true, data: order });
     } catch (error) {
