@@ -10,15 +10,20 @@ export default {
       res.status(500).json({ error: "Failed to fetch sections" });
     }
   },
-//   get: async function (req, res) {
-//     try {
-//       const sections = await Sections.find().populate("products");
-
-//       res.status(200).json(sections);
-//     } catch (error) {
-//       res.status(500).json({ error: "Failed to fetch sections" });
-//     }
-//   },
+  getOne: async function (req, res) {
+    try {
+      const sections = await Sections.findById(req.params.id).populate(
+        "products"
+      );
+      if (!sections) {
+        res.status(404).json({ error: "Section not found" });
+        return;
+      }
+      res.status(200).json(sections);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch sections" });
+    }
+  },
   create: async function (req, res) {
     try {
       const { name_uz, name_ru, products, description_uz, description_ru } =
@@ -72,6 +77,7 @@ export default {
 
       const updatedSection = await Sections.findById(req.params.id);
       updatedSection.products = [...updatedSection.products, ...products];
+      await updatedSection.save();
       if (!updatedSection) {
         return res.status(404).json({ error: "Section not found" });
       }
@@ -94,4 +100,3 @@ export default {
     }
   },
 };
- 
