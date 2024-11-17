@@ -9,12 +9,13 @@ let { createOrder, attachBox } = orderController;
 let { UserAuth } = Auth;
 let { validateOrderData } = orderMiddleware;
 let { authenticateAdmin } = adminMiddleware;
+let { isStoreAdmin } = isAllowed;
 
 const router = express.Router();
 
 // Route to add a new deliver
 router.post("/", UserAuth, validateOrderData, createOrder);
-router.put("/attachBox/:id",authenticateAdmin, attachBox);
+router.put("/attachBox/:id", isStoreAdmin, attachBox);
 
 // // Route to update an existing deliver by ID
 // router.put("/:id", isDeliverOrAdmin, putMD, update);

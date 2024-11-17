@@ -96,7 +96,7 @@ const orderController = {
         return res.status(404).json({ error: "Order not found" });
       }
       let storeAdminId = req.admin.id;
-      if (!storeAdminId || !storeAdminId.store) {
+      if (!storeAdminId || !req.admin.store) {
         return res.status(404).json({ error: "This is for Store Admin" });
       }
 

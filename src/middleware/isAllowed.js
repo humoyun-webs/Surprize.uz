@@ -51,6 +51,27 @@ export default {
       res.status(401).json({ error: "Invalid token" });
     }
   },
+  isStoreAdmin: async (req, res, next) => {
+    const token = req.headers.token;
+    if (!token) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+
+    try {
+      const decoded = JWT.VERIFY(token);
+      const admin = await Admin.findById(decoded.id);
+
+      if (!admin || !["admin", "store_admin"].includes(admin.role)) {
+        return res.status(403).json({ error: "Forbidden" });
+      }
+
+      req.admin = admin;
+      req.user = admin;
+      next();
+    } catch (error) {
+      res.status(401).json({ error: "Invalid token" });
+    }
+  },
   isDeliverOrAdmin: async (req, res, next) => {
     const token = req.headers.token;
     const editingDeliverId = req.params?.id;
