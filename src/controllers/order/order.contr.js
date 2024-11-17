@@ -44,8 +44,8 @@ const orderController = {
         await foo.save();
       }
 
-       newOrder.price=totalPrice
-      
+      newOrder.price = totalPrice;
+
       let metroLine = getLineByStation(location);
       let deliver =
         transport_type == "car"
@@ -100,25 +100,31 @@ const orderController = {
         return res.status(404).json({ error: "This is for Store Admin" });
       }
 
-      let store = await Store.findById(storeAdminId.store);
+      let store = await Store.findById(req.admin.store);
       let productLength = 0;
-      console.log(store);
-      // order.products.forEach(
-      //   async(e) >
-      //     {
-      //       if( store.products.incules(e)){
-      //         productLength++;
-      //       }
-      //     }
-      // );
+      order.products.forEach(async (e) => {
+        if (store.products.includes(e)) {
+          productLength++;
+        }
+      });
       let allBoxCount =
         (small ? small * 1 : 0) +
         (medium ? medium * 1 : 0) +
         (big ? big * 1 : 0);
-      if (order.products.length < allBoxCount) {
+      if (productLength < allBoxCount) {
         return res.status(400).json({
           error:
             "The number of boxes should not be more than that of products.",
+        });
+      }
+      if (
+        small * 1 > store.boxes.small * 1 ||
+        medium * 1 > store.boxes.medium * 1 ||
+        big * 1 > store.boxes.big * 1
+      ) {
+        return res.status(400).json({
+          error:
+            "Not enough boxes",
         });
       }
 
@@ -127,7 +133,16 @@ const orderController = {
       order.boxes.medium = medium;
 
       order.boxes.big = big;
+      store.boxes.small = small
+        ? store.boxes.small * 1 - small * 1
+        : store.boxes.small;
 
+      store.boxes.medium = medium
+        ? store.boxes.medium * 1 - medium * 1
+        : store.boxes.medium;
+
+      store.boxes.big = big ? store.boxes.big * 1 - big * 1 : store.boxes.big;
+      await store.save();
       await order.save();
       res.status(201).json({ success: true, data: order });
     } catch (error) {
