@@ -3,12 +3,13 @@ import userContr from './user.contr.js';
 import userMiddleware from './user.middleware.js';
 import auth from '../../middleware/auth.js';
 const router = express.Router();
-let { get, getById, create, update, delete: deleteUser,login,toggleFavorite,getFavorites } = userContr;
+let { get, getById, create, update,getOrders , delete: deleteUser,login,toggleFavorite,getFavorites } = userContr;
 let {UserUpdateMD,UserPostMD} = userMiddleware;
 let { UserAuth,UserModifyAuth } = auth;
 
 router.get('/', get);
 router.get("/favorite", UserAuth, getFavorites);
+router.get("/orders", UserAuth, getOrders);
 router.get('/:id', getById);
 router.post('/',UserPostMD, create);
 router.post("/login", login);

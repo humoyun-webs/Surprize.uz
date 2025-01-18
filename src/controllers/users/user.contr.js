@@ -35,7 +35,7 @@ export default {
 
   create: async (req, res) => {
     try {
-      const { name, age, location, password,phone: number, code } = req.body;
+      const { name, age, location, password, phone: number, code } = req.body;
 
       if (!code) {
         const generatedConfirmationCode = generateCode();
@@ -54,7 +54,7 @@ export default {
         });
       }
       const hashedPassword = await bcrypt.hash(password, 10);
-      req.body.password=hashedPassword
+      req.body.password = hashedPassword;
       const user = await User.create(req.body);
 
       let token = JWT.SIGN({ id: user.id });
@@ -111,13 +111,9 @@ export default {
       req.body.password = password
         ? await bcrypt.hash(password, 10)
         : undefined;
-      const user = await User.findByIdAndUpdate(
-        req.params.id,
-        req.body,
-        {
-          new: true,
-        }
-      );
+      const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+      });
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
@@ -126,7 +122,7 @@ export default {
       console.log(error);
       res.status(500).json({ error: "Failed to update user" });
     }
-  }, 
+  },
 
   delete: async (req, res) => {
     try {
@@ -178,6 +174,19 @@ export default {
       res.json(user.favorite);
     } catch (error) {
       res.status(500).json({ error: "Failed to retrieve favorite products" });
+    }
+  },
+  getOrders: async (req, res) => {
+    try {
+      const userId = req.id;
+
+      const user = await User.findById(userId).populate("orders");
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      res.json(user.orders);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to retrieve orders" });
     }
   },
 };
