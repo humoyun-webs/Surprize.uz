@@ -13,6 +13,7 @@ import develiverRouter from "./deliver/deliver.routes.js"
 import orderRouter from "./order/order.routes.js"
 import bannerRouter from "./banner/banner.routes.js"
 import sectionRouter from "./sections/section.routes.js";
+import stationsRouter from "./other/getStations.js";
 
 
  
@@ -30,6 +31,7 @@ router.use("/deliver", develiverRouter);
 router.use("/order", orderRouter);
 router.use("/banner", bannerRouter);
 router.use("/sections", sectionRouter);
+router.use("/stations", stationsRouter);
 
 router.get("/", (req, res) => {
   res.send(`
