@@ -5,6 +5,7 @@ import fileUpload from 'express-fileupload'
 import cors from 'cors'
 import bodparser from 'body-parser'
 import http from 'http';
+import { log } from "console";
 // import { initSocket } from '../socket/socket.js'; // Import the socket setup function
 
 const app = express();
@@ -12,6 +13,11 @@ const PORT = Number(process.env.PORT) || 5000;
 const server = http.createServer(app);
 // initSocket(server);  
 
+app.get("/", () => {
+  console.log('request');
+  
+  return "hi"
+})
 
 app.use(express.json());
 app.use("/upload", express.static(`${process.cwd()}/src/public`));
